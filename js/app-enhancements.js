@@ -102,19 +102,28 @@ async function loadFavoriteStatesInResults() {
  * Enhanced compare function that adds clickable names
  * This wraps the existing compareSpecies function
  */
+console.log('app-enhancements.js loaded');
+console.log('compareSpecies exists?', typeof compareSpecies);
+
 if (typeof compareSpecies !== 'undefined') {
+    console.log('✅ Wrapping compareSpecies function');
     const originalCompareSpecies = compareSpecies;
     compareSpecies = function() {
+        console.log('🎯 Enhanced compareSpecies called!');
         // Call original function
         const result = originalCompareSpecies();
         
+        console.log('⏰ Scheduling makeSpeciesNamesClickable...');
         // Add enhancements after a brief delay to ensure DOM is updated
         setTimeout(() => {
+            console.log('🔧 Calling makeSpeciesNamesClickable now');
             makeSpeciesNamesClickable();
         }, 100);
         
         return result;
     };
+} else {
+    console.log('❌ compareSpecies NOT FOUND - cannot wrap');
 }
 
 /**
