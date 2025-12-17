@@ -336,3 +336,53 @@ textarea:focus {
 [data-theme="dark"] .scientific-name {
     color: var(--text-secondary);
 }
+/* ===== FIX FOR LIGHT-BACKGROUND ELEMENTS ===== */
+
+/* Warning and info boxes keep DARK text (they have light backgrounds) */
+[data-theme="dark"] .warning-box,
+[data-theme="dark"] .warning-box *,
+[data-theme="dark"] .info-box,
+[data-theme="dark"] .info-box * {
+    color: #2c3e50 !important;
+}
+
+[data-theme="dark"] .warning-box a,
+[data-theme="dark"] .info-box a {
+    color: #667eea !important;
+}
+
+/* Selection section - has white card background, needs dark text */
+[data-theme="dark"] .selection-section {
+    background: white;
+    color: #2c3e50;
+}
+
+[data-theme="dark"] .selection-section h2,
+[data-theme="dark"] .selection-section label {
+    color: #2c3e50 !important;
+}
+
+/* Selector boxes */
+[data-theme="dark"] .selector-box label {
+    color: #2c3e50 !important;
+}
+
+/* Species panel (white background in selection) */
+[data-theme="dark"] .species-panel {
+    background: white;
+    color: #2c3e50;
+}
+
+[data-theme="dark"] .category-details summary {
+    color: #667eea !important;
+    background: #f8f9fa;
+}
+
+[data-theme="dark"] .species-common-name,
+[data-theme="dark"] .species-scientific-name {
+    color: #2c3e50 !important;
+}
+
+[data-theme="dark"] .species-scientific-name {
+    color: #6c757d !important;
+}
