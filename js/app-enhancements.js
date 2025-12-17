@@ -9,12 +9,22 @@
  * Call this after displaying results
  */
 function makeSpeciesNamesClickable() {
+    console.log('🔍 makeSpeciesNamesClickable started');
+    
     // Find all fish names in the results
     const resultsDiv = document.querySelector('.results');
-    if (!resultsDiv) return;
+    if (!resultsDiv) {
+        console.log('❌ No .results div found');
+        return;
+    }
+    console.log('✅ Found results div');
 
     // Safety check: ensure selectedSpecies exists
-    if (typeof selectedSpecies === 'undefined') return;
+    if (typeof selectedSpecies === 'undefined') {
+        console.log('❌ selectedSpecies is undefined');
+        return;
+    }
+    console.log('✅ selectedSpecies exists:', selectedSpecies);
 
     // Get all the fish data from selected panels
     const fish1Key = selectedSpecies.panel1;
@@ -22,23 +32,39 @@ function makeSpeciesNamesClickable() {
     const fish3Key = selectedSpecies.panel3;
 
     const selectedFish = [fish1Key, fish2Key, fish3Key].filter(Boolean);
+    console.log('🐟 Selected fish:', selectedFish);
 
     // Replace each fish name with clickable link
     selectedFish.forEach(fishKey => {
         const fish = fishDatabase[fishKey];
-        if (!fish) return;
+        if (!fish) {
+            console.log('❌ Fish not found in database:', fishKey);
+            return;
+        }
+        
+        console.log('🔧 Processing:', fish.commonName, 'key:', fishKey);
 
         // Find all instances of this fish name in results
         const fishNameRegex = new RegExp(`\\b${fish.commonName}\\b`, 'g');
         
+        const beforeHTML = resultsDiv.innerHTML;
         resultsDiv.innerHTML = resultsDiv.innerHTML.replace(
             fishNameRegex,
             `<a href="species.html?fish=${fishKey}" class="fish-name-link">${fish.commonName}</a>`
         );
+        const afterHTML = resultsDiv.innerHTML;
+        
+        if (beforeHTML !== afterHTML) {
+            console.log('✅ Replaced text for:', fish.commonName);
+        } else {
+            console.log('⚠️ No replacement occurred for:', fish.commonName);
+        }
     });
 
     // Add favorite stars next to fish names in the header
     addFavoriteStarsToResults(selectedFish);
+    
+    console.log('✅ makeSpeciesNamesClickable completed');
 }
 
 /**
