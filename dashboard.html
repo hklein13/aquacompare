@@ -85,8 +85,8 @@
     </div>
 
     <div class="footer">
-        <p>&copy; 2024 Comparium</p>
-        <p><a href="about.html">About</a> | <a href="/cdn-cgi/l/email-protection#bec7d1cbcc93dbd3dfd7d2fedbc6dfd3ced2db90ddd1d3">Contact</a></p>
+    <p>&copy; <span id="copyright-year"></span> Comparium. </p>
+    <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
     <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="js/fish-data.js"></script>
@@ -231,7 +231,13 @@
                 authManager.showMessage('Data exported successfully', 'success');
             }
         }
+    <!-- Auto-update copyright year -->
+    <script>
+        document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
+
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
     <script src="js/theme-manager.js"></script>
 </body>
 </html>
