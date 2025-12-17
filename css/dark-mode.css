@@ -216,3 +216,58 @@ textarea:focus {
 .empty-state-small {
     color: var(--text-secondary);
 }
+/* ============================================================================
+   IMPROVED TEXT CONTRAST IN DARK MODE
+   ============================================================================ */
+
+/* Ensure ALL text uses theme colors */
+[data-theme="dark"] h1,
+[data-theme="dark"] h2,
+[data-theme="dark"] h3,
+[data-theme="dark"] h4,
+[data-theme="dark"] h5,
+[data-theme="dark"] h6,
+[data-theme="dark"] p,
+[data-theme="dark"] li,
+[data-theme="dark"] span,
+[data-theme="dark"] div,
+[data-theme="dark"] label,
+[data-theme="dark"] strong {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] small {
+    color: var(--text-secondary) !important;
+}
+
+/* Auth pages */
+[data-theme="dark"] .auth-container,
+[data-theme="dark"] .auth-box,
+[data-theme="dark"] .auth-links {
+    color: var(--text-primary) !important;
+}
+
+/* Form placeholders */
+[data-theme="dark"] input::placeholder,
+[data-theme="dark"] textarea::placeholder {
+    color: var(--text-secondary);
+    opacity: 0.7;
+}
+
+/* Results and panels */
+[data-theme="dark"] .results,
+[data-theme="dark"] .comparison-panel,
+[data-theme="dark"] .dashboard-section,
+[data-theme="dark"] .content {
+    color: var(--text-primary) !important;
+}
+
+/* Species detail */
+[data-theme="dark"] .species-detail,
+[data-theme="dark"] .info-card {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .scientific-name {
+    color: var(--text-secondary) !important;
+}
