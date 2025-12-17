@@ -229,22 +229,20 @@ textarea:focus {
 [data-theme="dark"] h6,
 [data-theme="dark"] p,
 [data-theme="dark"] li,
-[data-theme="dark"] span,
-[data-theme="dark"] div,
 [data-theme="dark"] label,
 [data-theme="dark"] strong {
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
 }
 
 [data-theme="dark"] small {
-    color: var(--text-secondary) !important;
+    color: var(--text-secondary);
 }
 
 /* Auth pages */
 [data-theme="dark"] .auth-container,
 [data-theme="dark"] .auth-box,
 [data-theme="dark"] .auth-links {
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
 }
 
 /* Form placeholders */
@@ -257,40 +255,66 @@ textarea:focus {
 /* Results and panels */
 [data-theme="dark"] .results,
 [data-theme="dark"] .comparison-panel,
-[data-theme="dark"] .dashboard-section,
-[data-theme="dark"] .content {
-    color: var(--text-primary) !important;
+[data-theme="dark"] .dashboard-section {
+    color: var(--text-primary);
 }
+
+/* ===== COMPARISON GRID FIXES ===== */
 
 /* Comparison grid container */
 [data-theme="dark"] .comparison-grid {
     background: var(--bg-primary);
-}
-
-/* Comparison cards */
-[data-theme="dark"] .comparison-card {
-    background: var(--bg-card);
-}
-
-/* Fish names at top */
-[data-theme="dark"] .comparison-card h2,
-[data-theme="dark"] .comparison-card h3 {
     color: var(--text-primary);
 }
 
-/* Left side labels - white text */
-[data-theme="dark"] .spec-row {
+/* Fish name headers at top */
+[data-theme="dark"] .fish-column {
+    /* Keep gradient background and white text */
+}
+
+/* Left side labels - WHITE text on dark background */
+[data-theme="dark"] .attribute-label {
     color: var(--text-primary);
 }
 
-[data-theme="dark"] .spec-label {
-    color: var(--text-primary);
-}
-
-/* VALUE BOXES - DARK text on white background */
-[data-theme="dark"] .spec-value {
-    background: white;
+/* VALUE BOXES - DARK text on light background */
+[data-theme="dark"] .attribute-value {
+    background: #f8f9fa;
     color: #2c3e50 !important;
+}
+
+/* Compatibility alert text */
+[data-theme="dark"] .compatibility-alert {
+    color: #2c3e50;
+}
+
+[data-theme="dark"] .compatibility-alert h3,
+[data-theme="dark"] .compatibility-alert li {
+    color: #2c3e50;
+}
+
+/* ===== ABOUT PAGE / CONTENT SECTION FIXES ===== */
+
+[data-theme="dark"] .content-section {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .content-section h2,
+[data-theme="dark"] .content-section h3,
+[data-theme="dark"] .content-section h4 {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .content-section p,
+[data-theme="dark"] .content-section li,
+[data-theme="dark"] .content-section ol {
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .info-box,
+[data-theme="dark"] .warning-box {
+    color: #2c3e50;
 }
 
 /* Empty state */
@@ -306,9 +330,9 @@ textarea:focus {
 /* Species detail */
 [data-theme="dark"] .species-detail,
 [data-theme="dark"] .info-card {
-    color: var(--text-primary) !important;
+    color: var(--text-primary);
 }
 
 [data-theme="dark"] .scientific-name {
-    color: var(--text-secondary) !important;
+    color: var(--text-secondary);
 }
