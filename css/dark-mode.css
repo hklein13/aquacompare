@@ -386,3 +386,69 @@ textarea:focus {
 [data-theme="dark"] .species-scientific-name {
     color: #6c757d !important;
 }
+/* ===== DASHBOARD PAGE FIXES ===== */
+
+/* Dashboard header - needs light text */
+[data-theme="dark"] .dashboard-header {
+    background: var(--bg-card);
+    color: var(--text-primary);
+}
+
+[data-theme="dark"] .dashboard-header h1,
+[data-theme="dark"] .dashboard-header p {
+    color: var(--text-primary) !important;
+}
+
+/* Dashboard sections - needs light text */
+[data-theme="dark"] .dashboard-section h2 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .dashboard-section p {
+    color: var(--text-primary) !important;
+}
+
+/* ===== COMPATIBILITY ALERT BACKGROUNDS IN DARK MODE ===== */
+
+/* Warning boxes need LIGHTER backgrounds in dark mode for contrast */
+[data-theme="dark"] .compatibility-alert.warning {
+    background: rgba(255, 193, 7, 0.25) !important;
+    border-left-color: #ffc107;
+}
+
+/* Ensure warning text is visible */
+[data-theme="dark"] .compatibility-alert.warning,
+[data-theme="dark"] .compatibility-alert.warning * {
+    color: var(--text-primary) !important;
+}
+
+/* Good/success alerts */
+[data-theme="dark"] .compatibility-alert.good {
+    background: rgba(40, 167, 69, 0.25) !important;
+    border-left-color: #28a745;
+}
+
+[data-theme="dark"] .compatibility-alert.good,
+[data-theme="dark"] .compatibility-alert.good * {
+    color: var(--text-primary) !important;
+}
+
+/* Danger/red alerts */
+[data-theme="dark"] .compatibility-alert.danger {
+    background: rgba(220, 53, 69, 0.25) !important;
+    border-left-color: #dc3545;
+}
+
+[data-theme="dark"] .compatibility-alert.danger,
+[data-theme="dark"] .compatibility-alert.danger * {
+    color: var(--text-primary) !important;
+}
+
+/* Tank card headers */
+[data-theme="dark"] .tank-card h3 {
+    color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .tank-card-meta {
+    color: var(--text-secondary) !important;
+}
