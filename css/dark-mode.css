@@ -257,8 +257,29 @@ textarea:focus {
 /* Results and panels */
 [data-theme="dark"] .results,
 [data-theme="dark"] .comparison-panel,
+[data-theme="dark"] .comparison-grid,
+[data-theme="dark"] .comparison-card,
 [data-theme="dark"] .dashboard-section,
 [data-theme="dark"] .content {
+    color: var(--text-primary) !important;
+    background: var(--bg-card);
+}
+
+/* All text inside comparison grid */
+[data-theme="dark"] .comparison-grid *,
+[data-theme="dark"] .comparison-card * {
+    color: var(--text-primary) !important;
+}
+
+/* Spec rows and values */
+[data-theme="dark"] .spec-row,
+[data-theme="dark"] .spec-label,
+[data-theme="dark"] .spec-value {
+    color: var(--text-primary) !important;
+}
+
+/* Empty state */
+[data-theme="dark"] .empty-state {
     color: var(--text-primary) !important;
 }
 
