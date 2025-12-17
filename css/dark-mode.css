@@ -257,13 +257,11 @@ textarea:focus {
 /* Results and panels */
 [data-theme="dark"] .results,
 [data-theme="dark"] .comparison-panel,
-[data-theme="dark"] .comparison-grid,
-[data-theme="dark"] .comparison-card,
 [data-theme="dark"] .dashboard-section,
 [data-theme="dark"] .content {
     color: var(--text-primary) !important;
-    background: var(--bg-card);
 }
+
 /* Comparison grid container */
 [data-theme="dark"] .comparison-grid {
     background: var(--bg-primary);
@@ -303,6 +301,12 @@ textarea:focus {
 [data-theme="dark"] .empty-state h3,
 [data-theme="dark"] .empty-state p {
     color: var(--text-primary);
+}
+
+/* Species detail */
+[data-theme="dark"] .species-detail,
+[data-theme="dark"] .info-card {
+    color: var(--text-primary) !important;
 }
 
 [data-theme="dark"] .scientific-name {
