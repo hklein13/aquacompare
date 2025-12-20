@@ -99,12 +99,18 @@
     <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
+    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/fish-data.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script>
-        // Require authentication
+        // Wait for Firebase to be initialized before checking auth
         (async () => {
+            // Wait for firebase-init.js to load and set up Firebase
+            while (!window.firebaseAuth) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+
             const isAuthed = await authManager.requireAuth();
             if (isAuthed) {
                 await loadDashboard();
@@ -113,10 +119,16 @@
 
         async function loadDashboard() {
             // Get UID from Firebase Auth (already verified by requireAuth)
-            const uid = window.firebaseAuth.currentUser.uid;
+            const uid = window.firebaseAuth.currentUser?.uid;
 
-            // Load profile from Firestore
-            const profile = await storageService.getUserProfile(uid);
+            if (!uid) {
+                console.error('No UID found');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // Load profile directly using UID
+            const profile = await window.firestoreGetProfile(uid);
 
             if (!profile) {
                 console.error('Profile not found');
@@ -257,7 +269,6 @@
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
-    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/theme-manager.js"></script>
 </body>
 </html>
