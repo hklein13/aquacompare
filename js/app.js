@@ -446,7 +446,9 @@ async function loadFavoritesState() {
 async function saveComparisonToHistory(fishData, isCompatible) {
     if (!authManager.isLoggedIn()) return;
 
-    const username = authManager.getCurrentUsername();
+    const uid = window.firebaseAuth?.currentUser?.uid;
+    if (!uid) return;
+
     const comparison = {
         species: fishData.map(f => ({
             key: f.commonName.toLowerCase().replace(/\s+/g, ''),
@@ -455,7 +457,7 @@ async function saveComparisonToHistory(fishData, isCompatible) {
         compatible: isCompatible
     };
 
-    await storageService.saveComparison(username, comparison);
+    await storageService.saveComparison(uid, comparison);
 }
 
 // Enhanced compareSpecies to save history
