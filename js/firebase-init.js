@@ -30,6 +30,21 @@ try {
 const auth = getAuth(app);
 const firestore = getFirestore(app);
 
+// PRODUCTION FIX: Promise that resolves when Firebase Auth completes initial state check
+// This prevents race conditions where we check auth before Firebase restores the session
+let resolveAuthReady;
+window.firebaseAuthReady = new Promise((resolve) => {
+  resolveAuthReady = resolve;
+});
+
+// Auth state listener - fires when session is restored or user logs in/out
+onAuthStateChanged(auth, (user) => {
+  if (resolveAuthReady) {
+    resolveAuthReady(user); // Resolve promise with user object (or null if not logged in)
+    resolveAuthReady = null; // Only resolve once for initial page load state
+  }
+});
+
 // Expose helpers globally for ease of migration
 window.firebaseApp = app;
 window.firebaseAuth = auth;

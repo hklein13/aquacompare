@@ -74,10 +74,20 @@ class AuthManager {
 
         // Attempt registration
         const result = await this.storage.registerUser(username, password, email);
-        
+
         if (result.success) {
-            // Auto-login after successful registration
-            await this.login(username, password);
+            // CRITICAL: Auto-login after successful registration
+            // createUserWithEmailAndPassword logs the user in automatically,
+            // but we call login() to ensure authManager.currentUser is set
+            const loginResult = await this.login(username, password);
+            if (!loginResult.success) {
+                // Registration succeeded but login failed - critical error
+                console.error('Registration succeeded but login failed:', loginResult.message);
+                return {
+                    success: false,
+                    message: `Account created but login failed: ${loginResult.message}. Please try logging in manually.`
+                };
+            }
         }
 
         return result;
@@ -201,30 +211,18 @@ class AuthManager {
 
     /**
      * Require authentication (redirect to login if not logged in)
-     * Waits for Firebase auth to initialize first
+     * PRODUCTION: Uses Firebase's onAuthStateChanged event instead of polling
      */
     async requireAuth() {
-        // Wait briefly for Firebase Auth to initialize (max 2 seconds)
-        const maxWait = 2000;
-        const checkInterval = 50;
-        let waited = 0;
-
-        while (!window.firebaseAuth && waited < maxWait) {
-            await new Promise(resolve => setTimeout(resolve, checkInterval));
-            waited += checkInterval;
+        // Wait for firebase-init.js module to load (modules are deferred)
+        while (!window.firebaseAuthReady) {
+            await new Promise(resolve => setTimeout(resolve, 50));
         }
 
-        // If Firebase Auth available, wait a bit more for currentUser to be set
-        if (window.firebaseAuth) {
-            let authWait = 0;
-            while (!window.firebaseAuth.currentUser && authWait < 1000) {
-                await new Promise(resolve => setTimeout(resolve, 50));
-                authWait += 50;
-            }
-        }
+        // Wait for Firebase Auth to complete initial state check
+        const user = await window.firebaseAuthReady;
 
-        // Check Firebase auth state directly
-        if (window.firebaseAuth && window.firebaseAuth.currentUser) {
+        if (user) {
             return true;
         }
 

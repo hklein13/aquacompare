@@ -99,38 +99,44 @@
     <p><a href="about.html">About</a> | <a href="mailto:contact@comparium.net">Contact</a></p>
     </div>
 
+    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/fish-data.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script>
-        // Require authentication
+        // PRODUCTION: Proper auth check using Firebase's event system
         (async () => {
-            const isAuthed = await authManager.requireAuth();
-            if (isAuthed) {
-                initDashboard();
+            // Module scripts are deferred - wait for firebase-init.js to load
+            while (!window.firebaseAuthReady) {
+                await new Promise(resolve => setTimeout(resolve, 50));
             }
+
+            // Now wait for Firebase Auth to complete its initial state check
+            const user = await window.firebaseAuthReady;
+
+            if (!user) {
+                // Not authenticated - redirect to login
+                console.log('Not authenticated, redirecting to login');
+                window.location.href = 'login.html';
+                return;
+            }
+
+            // User is authenticated - load dashboard
+            await loadDashboard(user);
         })();
 
-        async function initDashboard() {
-            // Wait for auth to be fully initialized
-            let retries = 0;
-            while (!authManager.getCurrentUsername() && retries < 20) {
-                await new Promise(resolve => setTimeout(resolve, 100));
-                retries++;
-            }
-            loadDashboard();
-        }
+        async function loadDashboard(user) {
+            // Load profile directly using Firebase Auth UID
+            const profile = await window.firestoreGetProfile(user.uid);
 
-        async function loadDashboard() {
-            const username = authManager.getCurrentUsername();
-            if (username) {
-                document.getElementById('username-display').textContent = username;
-            } else {
-                document.getElementById('username-display').textContent = 'User';
+            if (!profile) {
+                console.error('Profile not found');
+                window.location.href = 'login.html';
+                return;
             }
 
-            // Load profile data
-            const profile = await storageService.getUserProfile(username);
+            // Display username
+            document.getElementById('username-display').textContent = profile.username || 'User';
             
             if (profile) {
                 // Update stats
@@ -262,7 +268,6 @@
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
-    <script type="module" src="js/firebase-init.js"></script>
     <script src="js/theme-manager.js"></script>
 </body>
 </html>
