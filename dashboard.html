@@ -237,15 +237,15 @@
         }
 
         async function removeFavorite(speciesKey) {
-            const username = authManager.getCurrentUsername();
-            await storageService.removeFavorite(username, speciesKey);
+            const uid = authManager.getCurrentUid();
+            await storageService.removeFavorite(uid, speciesKey);
             authManager.showMessage('Removed from favorites', 'success');
             loadDashboard(); // Reload to update display
         }
 
         async function exportData() {
-            const username = authManager.getCurrentUsername();
-            const data = await storageService.exportUserData(username);
+            const uid = authManager.getCurrentUid();
+            const data = await storageService.exportUserData(uid);
             
             if (data) {
                 // Create download

@@ -184,9 +184,9 @@ function generateFavoriteStar(speciesKey) {
  */
 async function loadFavoriteStateForSpecies(speciesKey) {
     if (!authManager || !authManager.isLoggedIn()) return;
-    
-    const username = authManager.getCurrentUsername();
-    const isFav = await storageService.isFavorite(username, speciesKey);
+
+    const uid = authManager.getCurrentUid();
+    const isFav = await storageService.isFavorite(uid, speciesKey);
     
     const star = document.querySelector(`.favorite-star[data-species="${speciesKey}"]`);
     if (star && isFav) {

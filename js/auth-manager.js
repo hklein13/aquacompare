@@ -76,18 +76,10 @@ class AuthManager {
         const result = await this.storage.registerUser(username, password, email);
 
         if (result.success) {
-            // CRITICAL: Auto-login after successful registration
-            // createUserWithEmailAndPassword logs the user in automatically,
-            // but we call login() to ensure authManager.currentUser is set
-            const loginResult = await this.login(username, password);
-            if (!loginResult.success) {
-                // Registration succeeded but login failed - critical error
-                console.error('Registration succeeded but login failed:', loginResult.message);
-                return {
-                    success: false,
-                    message: `Account created but login failed: ${loginResult.message}. Please try logging in manually.`
-                };
-            }
+            // Firebase createUserWithEmailAndPassword already logs the user in
+            // Just cache the username for display and update UI
+            this.currentUser = username;
+            this.updateUIForLoggedInUser();
         }
 
         return result;
@@ -107,9 +99,10 @@ class AuthManager {
 
         // Attempt login
         const result = await this.storage.loginUser(username, password);
-        
+
         if (result.success) {
-            this.currentUser = username;
+            // Use actual username from Firestore profile, not the input parameter
+            this.currentUser = result.user?.username || username;
             this.updateUIForLoggedInUser();
         }
 
@@ -141,10 +134,21 @@ class AuthManager {
 
     /**
      * Get current username
+     * FOR DISPLAY ONLY - use getCurrentUid() for data operations
      * @returns {string|null}
      */
     getCurrentUsername() {
         return this.currentUser;
+    }
+
+    /**
+     * Get current user's Firebase Auth UID
+     * USE THIS for all data operations (saving tanks, comparisons, etc.)
+     * This is synchronous and always reliable - reads directly from Firebase Auth
+     * @returns {string|null} UID if logged in, null otherwise
+     */
+    getCurrentUid() {
+        return window.firebaseAuth?.currentUser?.uid || null;
     }
 
     /**

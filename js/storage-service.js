@@ -308,17 +308,16 @@ class StorageService {
 
     /**
      * Save a comparison to history
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @param {object} comparison
      * @returns {Promise<{success: boolean}>}
      */
-    async saveComparison(username, comparison) {
+    async saveComparison(uid, comparison) {
         try {
             if (!window.firebaseFirestore || !window.firestoreAddComparison) {
                 return { success: false };
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return { success: false };
 
             return await window.firestoreAddComparison(uid, comparison);
@@ -331,16 +330,15 @@ class StorageService {
 
     /**
      * Get comparison history
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @returns {Promise<array>}
      */
-    async getComparisonHistory(username) {
+    async getComparisonHistory(uid) {
         try {
             if (!window.firebaseFirestore || !window.firestoreGetComparisons) {
                 return [];
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return [];
 
             return await window.firestoreGetComparisons(uid);
@@ -357,17 +355,16 @@ class StorageService {
 
     /**
      * Add species to favorites
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @param {string} speciesKey
      * @returns {Promise<{success: boolean}>}
      */
-    async addFavorite(username, speciesKey) {
+    async addFavorite(uid, speciesKey) {
         try {
             if (!window.firebaseFirestore || !window.firestoreAddFavorite) {
                 return { success: false };
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return { success: false };
 
             return await window.firestoreAddFavorite(uid, speciesKey);
@@ -380,17 +377,16 @@ class StorageService {
 
     /**
      * Remove species from favorites
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @param {string} speciesKey
      * @returns {Promise<{success: boolean}>}
      */
-    async removeFavorite(username, speciesKey) {
+    async removeFavorite(uid, speciesKey) {
         try {
             if (!window.firebaseFirestore || !window.firestoreRemoveFavorite) {
                 return { success: false };
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return { success: false };
 
             return await window.firestoreRemoveFavorite(uid, speciesKey);
@@ -403,16 +399,15 @@ class StorageService {
 
     /**
      * Get favorite species
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @returns {Promise<array>}
      */
-    async getFavorites(username) {
+    async getFavorites(uid) {
         try {
             if (!window.firebaseFirestore || !window.firestoreGetFavorites) {
                 return [];
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return [];
 
             return await window.firestoreGetFavorites(uid);
@@ -425,12 +420,12 @@ class StorageService {
 
     /**
      * Check if species is favorited
-     * @param {string} username 
-     * @param {string} speciesKey 
+     * @param {string} uid - Firebase Auth UID
+     * @param {string} speciesKey
      * @returns {Promise<boolean>}
      */
-    async isFavorite(username, speciesKey) {
-        const favorites = await this.getFavorites(username);
+    async isFavorite(uid, speciesKey) {
+        const favorites = await this.getFavorites(uid);
         return favorites.includes(speciesKey);
     }
 
@@ -440,17 +435,16 @@ class StorageService {
 
     /**
      * Save a tank configuration
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @param {object} tank
      * @returns {Promise<{success: boolean, tankId?: string}>}
      */
-    async saveTank(username, tank) {
+    async saveTank(uid, tank) {
         try {
             if (!window.firebaseFirestore || !window.firestoreSaveTank) {
                 return { success: false };
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return { success: false };
 
             return await window.firestoreSaveTank(uid, tank);
@@ -463,16 +457,15 @@ class StorageService {
 
     /**
      * Get all tanks for user
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @returns {Promise<array>}
      */
-    async getTanks(username) {
+    async getTanks(uid) {
         try {
             if (!window.firebaseFirestore || !window.firestoreGetTanks) {
                 return [];
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return [];
 
             return await window.firestoreGetTanks(uid);
@@ -485,13 +478,13 @@ class StorageService {
 
     /**
      * Get single tank by ID
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @param {string} tankId
      * @returns {Promise<object|null>}
      */
-    async getTank(username, tankId) {
+    async getTank(uid, tankId) {
         try {
-            const tanks = await this.getTanks(username);
+            const tanks = await this.getTanks(uid);
             return tanks.find(t => t.id === tankId) || null;
         } catch (error) {
             console.error('Error getting tank:', error);
@@ -501,17 +494,16 @@ class StorageService {
 
     /**
      * Delete a tank
-     * @param {string} username
+     * @param {string} uid - Firebase Auth UID
      * @param {string} tankId
      * @returns {Promise<{success: boolean}>}
      */
-    async deleteTank(username, tankId) {
+    async deleteTank(uid, tankId) {
         try {
             if (!window.firebaseFirestore || !window.firestoreDeleteTank) {
                 return { success: false };
             }
 
-            const uid = await this._resolveUid(username);
             if (!uid) return { success: false };
 
             return await window.firestoreDeleteTank(uid, tankId);
@@ -528,31 +520,19 @@ class StorageService {
 
     /**
      * Export user data as JSON
-     * @param {string} username 
+     * @param {string} uid - Firebase Auth UID
      * @returns {Promise<object|null>}
      */
-    async exportUserData(username) {
+    async exportUserData(uid) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
+            if (!uid) return null;
+
             if (window.firebaseFirestore && window.firestoreExportUserData) {
                 return await window.firestoreExportUserData(uid);
             }
 
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return null;
-
-            const user = JSON.parse(userJson);
-            
-            // Remove sensitive data
-            const exportData = {
-                username: user.username,
-                email: user.email,
-                created: user.created,
-                profile: user.profile,
-                exportDate: new Date().toISOString()
-            };
-
-            return exportData;
+            // Firestore not available
+            return null;
         } catch (error) {
             console.error('Error exporting data:', error);
             return null;
@@ -561,13 +541,14 @@ class StorageService {
 
     /**
      * Import user data from JSON
-     * @param {string} username 
-     * @param {object} importData 
+     * @param {string} uid - Firebase Auth UID
+     * @param {object} importData
      * @returns {Promise<{success: boolean}>}
      */
-    async importUserData(username, importData) {
+    async importUserData(uid, importData) {
         try {
-            const uid = localStorage.getItem(`username_map_${username}`) || username;
+            if (!uid) return { success: false };
+
             if (window.firebaseFirestore && window.firestoreImportUserData) {
                 return await window.firestoreImportUserData(uid, importData);
             }
@@ -597,34 +578,6 @@ class StorageService {
     // UTILITY METHODS
     // ========================================================================
 
-    /**
-     * Resolve username to UID
-     * @param {string} username - Username or UID
-     * @returns {Promise<string|null>} - UID or null
-     * @private
-     */
-    async _resolveUid(username) {
-        if (!username) return null;
-
-        // If it looks like an email, don't try username lookup
-        if (username.includes('@')) {
-            // Try to get profile by email
-            if (window.firestoreGetProfileByEmail) {
-                const profile = await window.firestoreGetProfileByEmail(username);
-                return profile?.uid || null;
-            }
-            return null;
-        }
-
-        // Try to look up UID from username
-        if (window.firestoreGetUidByUsername) {
-            const userData = await window.firestoreGetUidByUsername(username);
-            if (userData?.uid) return userData.uid;
-        }
-
-        // Assume it's already a UID
-        return username;
-    }
 }
 
 // Create singleton instance

@@ -413,15 +413,15 @@ async function toggleFavorite(speciesKey, element) {
         return;
     }
 
-    const username = authManager.getCurrentUsername();
-    const isFavorite = await storageService.isFavorite(username, speciesKey);
+    const uid = authManager.getCurrentUid();
+    const isFavorite = await storageService.isFavorite(uid, speciesKey);
 
     if (isFavorite) {
-        await storageService.removeFavorite(username, speciesKey);
+        await storageService.removeFavorite(uid, speciesKey);
         element.classList.remove('active');
         authManager.showMessage('Removed from favorites', 'success');
     } else {
-        await storageService.addFavorite(username, speciesKey);
+        await storageService.addFavorite(uid, speciesKey);
         element.classList.add('active');
         authManager.showMessage('Added to favorites!', 'success');
     }
@@ -431,8 +431,8 @@ async function toggleFavorite(speciesKey, element) {
 async function loadFavoritesState() {
     if (!authManager.isLoggedIn()) return;
 
-    const username = authManager.getCurrentUsername();
-    const favorites = await storageService.getFavorites(username);
+    const uid = authManager.getCurrentUid();
+    const favorites = await storageService.getFavorites(uid);
 
     document.querySelectorAll('.favorite-star').forEach(star => {
         const speciesKey = star.dataset.species;
