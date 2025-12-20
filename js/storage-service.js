@@ -44,7 +44,7 @@ class StorageService {
             const uid = userCredential.user.uid;
 
             // Create username mapping FIRST (must exist before profile due to Firestore rules)
-            const usernameMapped = await window.firestoreCreateUsername(username, uid);
+            const usernameMapped = await window.firestoreCreateUsername(username, uid, email);
             if (!usernameMapped) {
                 console.error('Failed to create username mapping');
                 return { success: false, message: 'Username is already taken. Please try another.' };
@@ -111,22 +111,18 @@ class StorageService {
                 // identifier is an email
                 email = identifier;
             } else {
-                // identifier is a username - look up UID from Firestore
+                // identifier is a username - look up UID and email from Firestore
                 if (!window.firestoreGetUidByUsername) {
                     return { success: false, message: 'Database connection unavailable. Please try again later.' };
                 }
 
-                uid = await window.firestoreGetUidByUsername(identifier);
-                if (!uid) {
+                const userData = await window.firestoreGetUidByUsername(identifier);
+                if (!userData || !userData.uid || !userData.email) {
                     return { success: false, message: 'Username not found' };
                 }
 
-                // Get email from user profile
-                const profile = await window.firestoreGetProfile(uid);
-                if (!profile || !profile.email) {
-                    return { success: false, message: 'User profile not found' };
-                }
-                email = profile.email;
+                uid = userData.uid;
+                email = userData.email;
             }
 
             // Sign in with Firebase Auth using email/password
