@@ -113,8 +113,8 @@ function addFavoriteStarsToResults(selectedFish) {
 async function loadFavoriteStatesInResults() {
     if (!authManager || !authManager.isLoggedIn()) return;
 
-    const username = authManager.getCurrentUsername();
-    const favorites = await storageService.getFavorites(username);
+    const uid = authManager.getCurrentUid();
+    const favorites = await storageService.getFavorites(uid);
 
     document.querySelectorAll('.results .favorite-star').forEach(star => {
         const speciesKey = star.getAttribute('data-species');
@@ -159,8 +159,8 @@ if (typeof compareSpecies !== 'undefined') {
 async function addFavoriteIndicatorsToDropdowns() {
     if (!authManager || !authManager.isLoggedIn()) return;
 
-    const username = authManager.getCurrentUsername();
-    const favorites = await storageService.getFavorites(username);
+    const uid = authManager.getCurrentUid();
+    const favorites = await storageService.getFavorites(uid);
 
     // Get all select elements
     const selects = document.querySelectorAll('select[id^="species"]');

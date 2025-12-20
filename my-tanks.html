@@ -211,8 +211,13 @@
 
         async function saveTank(event) {
             event.preventDefault();
-            
-            const username = authManager.getCurrentUsername();
+
+            const uid = authManager.getCurrentUid();
+            if (!uid) {
+                authManager.showMessage('Not logged in', 'error');
+                return;
+            }
+
             const tankId = document.getElementById('tank-id').value;
             
             const tank = {
@@ -224,7 +229,7 @@
                 updated: new Date().toISOString()
             };
 
-            const result = await storageService.saveTank(username, tank);
+            const result = await storageService.saveTank(uid, tank);
             
             if (result.success) {
                 authManager.showMessage('Tank saved successfully!', 'success');
@@ -236,8 +241,10 @@
         }
 
         async function loadTanks() {
-            const username = authManager.getCurrentUsername();
-            const tanks = await storageService.getTanks(username);
+            const uid = authManager.getCurrentUid();
+            if (!uid) return;
+
+            const tanks = await storageService.getTanks(uid);
             const container = document.getElementById('tanks-container');
 
             if (!Array.isArray(tanks) || tanks.length === 0) {
@@ -311,8 +318,10 @@
         }
 
         async function editTank(tankId) {
-            const username = authManager.getCurrentUsername();
-            const tank = await storageService.getTank(username, tankId);
+            const uid = authManager.getCurrentUid();
+            if (!uid) return;
+
+            const tank = await storageService.getTank(uid, tankId);
             
             if (tank) {
                 document.getElementById('tank-form-container').style.display = 'block';
@@ -333,8 +342,10 @@
                 return;
             }
 
-            const username = authManager.getCurrentUsername();
-            const result = await storageService.deleteTank(username, tankId);
+            const uid = authManager.getCurrentUid();
+            if (!uid) return;
+
+            const result = await storageService.deleteTank(uid, tankId);
             
             if (result.success) {
                 authManager.showMessage('Tank deleted', 'success');
