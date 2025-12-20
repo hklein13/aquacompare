@@ -247,17 +247,19 @@ window.firestoreUsernameExists = async (username) => {
 };
 
 /**
- * Create a username mapping (username -> UID) in Firestore
+ * Create a username mapping (username -> UID + email) in Firestore
  * @param {string} username - Username to register
  * @param {string} uid - Firebase Auth UID
+ * @param {string} email - User email (for login lookup)
  * @returns {Promise<boolean>} - True if created successfully, false otherwise
  */
-window.firestoreCreateUsername = async (username, uid) => {
+window.firestoreCreateUsername = async (username, uid, email) => {
   if (!firestore) return false;
   try {
     const ref = doc(firestore, 'usernames', username);
     await setDoc(ref, {
       uid: uid,
+      email: email,
       created: new Date().toISOString()
     });
     return true;
@@ -268,16 +270,20 @@ window.firestoreCreateUsername = async (username, uid) => {
 };
 
 /**
- * Get UID from username by querying the usernames collection
+ * Get user data from username by querying the usernames collection
  * @param {string} username - Username to lookup
- * @returns {Promise<string|null>} - UID if found, null otherwise
+ * @returns {Promise<{uid: string, email: string}|null>} - User data if found, null otherwise
  */
 window.firestoreGetUidByUsername = async (username) => {
   if (!firestore) return null;
   try {
     const ref = doc(firestore, 'usernames', username);
     const snap = await getDoc(ref);
-    return snap.exists() ? snap.data().uid : null;
+    if (snap.exists()) {
+      const data = snap.data();
+      return { uid: data.uid, email: data.email };
+    }
+    return null;
   } catch (e) {
     console.error('firestoreGetUidByUsername error:', e);
     return null;
