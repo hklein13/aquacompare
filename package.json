@@ -1,13 +1,15 @@
 {
   "name": "comparium",
   "version": "1.0.0",
+  "type": "module",
   "description": "A web-based tool for comparing freshwater aquarium fish species and checking compatibility. Includes 99 species with detailed care requirements, predation warnings, and compatibility analysis.",
   "main": "index.js",
   "scripts": {
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
-    "test:report": "playwright show-report"
+    "test:report": "playwright show-report",
+    "migrate:fish": "node scripts/migrate-fish-to-firestore.js"
   },
   "repository": {
     "type": "git",
@@ -16,6 +18,9 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
+  "dependencies": {
+    "firebase": "^10.7.1"
+  },
   "devDependencies": {
     "@playwright/test": "^1.57.0"
   }
