@@ -251,14 +251,28 @@ class GlossaryManager {
         }
 
         try {
-            // Wait for Firebase to initialize
+            // Wait for Firebase to initialize with timeout
+            const firebaseTimeout = new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Firebase initialization timeout')), 10000)
+            );
+
+            // Wait for firebaseAuthReady to be defined
+            let attempts = 0;
+            while (!window.firebaseAuthReady && attempts < 200) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+                attempts++;
+            }
+
             if (!window.firebaseAuthReady) {
                 console.warn('Firebase not initialized for glossary, using local data');
                 return this.glossaryData[category] || [];
             }
 
-            // Wait for Firebase initialization to complete
-            await window.firebaseAuthReady;
+            // Wait for Firebase initialization to complete or timeout
+            await Promise.race([
+                window.firebaseAuthReady,
+                firebaseTimeout
+            ]);
 
             // Import Firestore functions dynamically
             const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
@@ -317,9 +331,39 @@ class GlossaryManager {
     /**
      * Initialize the glossary UI
      */
-    init() {
-        this.renderCategories();
-        this.renderContent();
+    async init() {
+        try {
+            this.renderCategories();
+            await this.renderContent();
+        } catch (error) {
+            console.error('Error initializing glossary:', error);
+            this.showGlossaryError('Unable to load glossary data. Please <a href="javascript:location.reload()">refresh the page</a>.');
+        }
+    }
+
+    /**
+     * Show error state in glossary UI
+     */
+    showGlossaryError(message) {
+        const contentContainer = document.getElementById('glossaryContent');
+        if (contentContainer) {
+            contentContainer.innerHTML = `
+                <div class="empty-state">
+                    <div class="empty-state-icon">⚠️</div>
+                    <h3>Error Loading Glossary</h3>
+                    <p style="margin-top: 1rem;">${message}</p>
+                </div>
+            `;
+        }
+
+        const categoriesContainer = document.getElementById('glossaryCategories');
+        if (categoriesContainer) {
+            categoriesContainer.innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: #dc3545;">
+                    <p>Unable to load categories. Please refresh the page.</p>
+                </div>
+            `;
+        }
     }
 
     /**
@@ -513,11 +557,19 @@ class GlossaryManager {
 // Initialize glossary manager
 const glossaryManager = new GlossaryManager();
 
-// Wait for DOM to load
+// Wait for DOM to load with error handling
 if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => glossaryManager.init());
+    document.addEventListener('DOMContentLoaded', () => {
+        glossaryManager.init().catch(error => {
+            console.error('Fatal glossary initialization error:', error);
+            glossaryManager.showGlossaryError('Critical error loading glossary. Please refresh the page.');
+        });
+    });
 } else {
-    glossaryManager.init();
+    glossaryManager.init().catch(error => {
+        console.error('Fatal glossary initialization error:', error);
+        glossaryManager.showGlossaryError('Critical error loading glossary. Please refresh the page.');
+    });
 }
 
 /**

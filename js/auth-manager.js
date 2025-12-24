@@ -18,12 +18,28 @@ class AuthManager {
     async init() {
         // Wait for Firebase module to load (it's a deferred module script)
         const waitForFirebase = async () => {
-            let attempts = 0;
-            while (!window.firebaseAuthState && attempts < 100) {
-                await new Promise(resolve => setTimeout(resolve, 50));
-                attempts++;
+            try {
+                // Create timeout promise
+                const timeout = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Firebase auth initialization timeout')), 5000)
+                );
+
+                // Create polling promise
+                const poll = new Promise(async (resolve) => {
+                    let attempts = 0;
+                    while (!window.firebaseAuthState && attempts < 100) {
+                        await new Promise(r => setTimeout(r, 50));
+                        attempts++;
+                    }
+                    resolve(window.firebaseAuthState && window.firebaseAuth);
+                });
+
+                // Race between timeout and polling
+                return await Promise.race([poll, timeout]);
+            } catch (error) {
+                console.warn('Firebase auth timeout, falling back to basic auth:', error);
+                return false;
             }
-            return window.firebaseAuthState && window.firebaseAuth;
         };
 
         const firebaseReady = await waitForFirebase();
