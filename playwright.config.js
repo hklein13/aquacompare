@@ -48,7 +48,7 @@ export default defineConfig({
 
   // Run local dev server if TEST_URL is not set
   webServer: process.env.TEST_URL ? undefined : {
-    command: 'python3 -m http.server 8080',
+    command: 'npx http-server -p 8080 -c-1',
     port: 8080,
     reuseExistingServer: true,
     timeout: 10 * 1000,
