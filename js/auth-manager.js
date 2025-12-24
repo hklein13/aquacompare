@@ -72,9 +72,14 @@ class AuthManager {
      * @returns {Promise<{success: boolean, message: string}>}
      */
     async register(username, password, email) {
-        // Validation
-        if (!username || username.length < 3) {
-            return { success: false, message: 'Username must be at least 3 characters' };
+        // Validation - matches Firestore security rules
+        if (!username || username.length < 3 || username.length > 30) {
+            return { success: false, message: 'Username must be 3-30 characters' };
+        }
+
+        // Check allowed characters (alphanumeric, hyphens, underscores only)
+        if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+            return { success: false, message: 'Username can only contain letters, numbers, hyphens, and underscores' };
         }
 
         if (!password || password.length < 6) {

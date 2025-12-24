@@ -84,15 +84,38 @@
     <script>
         // Check if already logged in (wait for Firebase to initialize)
         (async () => {
-            // Wait for Firebase to initialize
-            while (!window.firebaseAuthReady) {
-                await new Promise(resolve => setTimeout(resolve, 50));
-            }
-            const user = await window.firebaseAuthReady;
+            try {
+                // Wait for Firebase to initialize with timeout (5 seconds)
+                const firebaseTimeout = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Firebase initialization timeout')), 5000)
+                );
 
-            if (user) {
-                // Already logged in - redirect to dashboard
-                window.location.href = 'dashboard.html';
+                // Wait for firebaseAuthReady to be defined
+                let attempts = 0;
+                while (!window.firebaseAuthReady && attempts < 100) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    attempts++;
+                }
+
+                if (!window.firebaseAuthReady) {
+                    console.warn('Firebase did not initialize - login form will still work');
+                    return;
+                }
+
+                // Wait for Firebase to complete initialization or timeout
+                const user = await Promise.race([
+                    window.firebaseAuthReady,
+                    firebaseTimeout
+                ]);
+
+                if (user) {
+                    // Already logged in - redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                // Allow user to proceed with login form even if Firebase fails to initialize
+                // The form will show appropriate errors when they try to log in
             }
         })();
 

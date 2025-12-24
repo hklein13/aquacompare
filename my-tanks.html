@@ -103,8 +103,28 @@
         if (!authManager.requireAuth()) {
             // Will redirect to login
         } else {
-            loadTanks();
-            populateSpeciesSelector();
+            // Initialize page with error handling
+            (async () => {
+                try {
+                    await loadTanks();
+                    populateSpeciesSelector();
+                } catch (error) {
+                    console.error('Error initializing My Tanks page:', error);
+                    showErrorState('Unable to load your tanks. Please <a href="javascript:location.reload()">refresh the page</a>.');
+                }
+            })();
+        }
+
+        function showErrorState(message) {
+            const container = document.getElementById('tanks-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="empty-state-small" style="text-align: center; padding: 2rem;">
+                        <p style="color: #dc3545; font-weight: bold;">⚠️ Error</p>
+                        <p style="margin: 1rem 0;">${message}</p>
+                    </div>
+                `;
+            }
         }
 
         function populateSpeciesSelector() {
@@ -241,23 +261,24 @@
         }
 
         async function loadTanks() {
-            const uid = authManager.getCurrentUid();
-            if (!uid) return;
+            try {
+                const uid = authManager.getCurrentUid();
+                if (!uid) return;
 
-            const tanks = await storageService.getTanks(uid);
-            const container = document.getElementById('tanks-container');
+                const tanks = await storageService.getTanks(uid);
+                const container = document.getElementById('tanks-container');
 
-            if (!Array.isArray(tanks) || tanks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state-small">
-                        <p>No tanks yet. Click "Create New Tank" to get started!</p>
-                    </div>
-                `;
-                return;
-            }
+                if (!Array.isArray(tanks) || tanks.length === 0) {
+                    container.innerHTML = `
+                        <div class="empty-state-small">
+                            <p>No tanks yet. Click "Create New Tank" to get started!</p>
+                        </div>
+                    `;
+                    return;
+                }
 
-            container.innerHTML = '';
-            tanks.forEach(tank => {
+                container.innerHTML = '';
+                tanks.forEach(tank => {
                 const speciesCount = tank.species ? tank.species.length : 0;
 
                 const card = document.createElement('div');
@@ -315,6 +336,10 @@
 
                 container.appendChild(card);
             });
+            } catch (error) {
+                console.error('Error loading tanks:', error);
+                showErrorState('Failed to load your tanks. Please <a href="javascript:location.reload()">refresh the page</a>.');
+            }
         }
 
         async function editTank(tankId) {
