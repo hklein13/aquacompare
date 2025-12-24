@@ -250,13 +250,16 @@ class GlossaryManager {
             return this.glossaryData[category] || [];
         }
 
-        // Wait for Firebase to initialize
-        if (!window.firebaseAuthReady) {
-            console.warn('Firebase not initialized for glossary, using local data');
-            return this.glossaryData[category] || [];
-        }
-
         try {
+            // Wait for Firebase to initialize
+            if (!window.firebaseAuthReady) {
+                console.warn('Firebase not initialized for glossary, using local data');
+                return this.glossaryData[category] || [];
+            }
+
+            // Wait for Firebase initialization to complete
+            await window.firebaseAuthReady;
+
             // Import Firestore functions dynamically
             const { getFirestore, collection, query, where, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
             const db = getFirestore();

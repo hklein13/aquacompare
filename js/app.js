@@ -15,13 +15,16 @@ let fishDatabase = {}; // Will be populated from Firestore or fallback
  * @returns {Promise<Object>} Fish database object
  */
 async function loadFishFromFirestore() {
-    // Wait for Firebase to initialize
-    if (!window.firebaseAuthReady) {
-        console.warn('Firebase not initialized, using fallback fish data');
-        return window.fishDatabase || {}; // Fallback to fish-data.js
-    }
-
     try {
+        // Wait for Firebase to initialize
+        if (!window.firebaseAuthReady) {
+            console.warn('Firebase not initialized, using fallback fish data');
+            return window.fishDatabase || {}; // Fallback to fish-data.js
+        }
+
+        // Wait for Firebase initialization to complete
+        await window.firebaseAuthReady;
+
         // Import Firestore functions
         const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
         const db = getFirestore();
