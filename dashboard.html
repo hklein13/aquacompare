@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/dark-mode.css">
     <link rel="stylesheet" href="css/enhanced-ui.css">
     <link rel="stylesheet" href="css/ocean-theme.css">
+    <link rel="stylesheet" href="css/migration-modal.css">
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-8VNY458QF3"></script>
     <script>
@@ -103,6 +104,9 @@
     <script src="js/fish-data.js"></script>
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
+    <script src="js/migration-detector.js"></script>
+    <script src="js/migration-ui.js"></script>
+    <script src="js/migration-service.js"></script>
     <script>
         // PRODUCTION: Proper auth check using Firebase's event system
         (async () => {
@@ -126,7 +130,10 @@
         })();
 
         async function loadDashboard(user) {
-            // Load profile directly using Firebase Auth UID
+            // FIRST: Check for migration
+            await migrationService.checkAndPromptMigration();
+
+            // THEN: Load profile (might be updated after migration)
             const profile = await window.firestoreGetProfile(user.uid);
 
             if (!profile) {
