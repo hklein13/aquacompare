@@ -109,10 +109,19 @@
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script>
-        // Check if already logged in
-        if (authManager.isLoggedIn()) {
-            window.location.href = 'dashboard.html';
-        }
+        // Check if already logged in (wait for Firebase to initialize)
+        (async () => {
+            // Wait for Firebase to initialize
+            while (!window.firebaseAuthReady) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+            const user = await window.firebaseAuthReady;
+
+            if (user) {
+                // Already logged in - redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
+        })();
 
         async function handleSignup(e) {
             e.preventDefault();

@@ -25,30 +25,43 @@ class StorageService {
      * @returns {Promise<{success: boolean, message: string}>}
      */
     async registerUser(username, password, email) {
+        let uid = null;
+        let usernameCreated = false;
+
         try {
             const auth = window.firebaseAuth;
 
             // Require Firebase Auth and Firestore
-            if (!auth || !window.firebaseSignUp || !window.firestoreSetProfile || !window.firestoreUsernameExists || !window.firestoreCreateUsername) {
+            if (!auth || !window.firebaseSignUp || !window.firestoreSetProfile || !window.firestoreUsernameExists || !window.firestoreCreateUsername || !window.firestoreDeleteUsername) {
                 return { success: false, message: 'Database connection unavailable. Please try again later.' };
             }
 
             // Check username uniqueness in Firestore
-            const usernameExists = await window.firestoreUsernameExists(username);
-            if (usernameExists) {
+            const usernameCheck = await window.firestoreUsernameExists(username);
+            if (usernameCheck.error) {
+                return { success: false, message: 'Database connection unavailable. Please try again later.' };
+            }
+            if (usernameCheck.exists) {
                 return { success: false, message: 'Username already exists' };
             }
 
             // Create Firebase Auth user with email/password
             const userCredential = await window.firebaseSignUp(auth, email, password);
-            const uid = userCredential.user.uid;
+            uid = userCredential.user.uid;
 
             // Create username mapping FIRST (must exist before profile due to Firestore rules)
             const usernameMapped = await window.firestoreCreateUsername(username, uid, email);
             if (!usernameMapped) {
                 console.error('Failed to create username mapping');
+                // CLEANUP: Delete the auth user we just created
+                try {
+                    await userCredential.user.delete();
+                } catch (deleteError) {
+                    console.error('Failed to cleanup auth user:', deleteError);
+                }
                 return { success: false, message: 'Username is already taken. Please try another.' };
             }
+            usernameCreated = true;
 
             // Create user profile object
             const user = {
@@ -68,6 +81,13 @@ class StorageService {
             const profileSaved = await window.firestoreSetProfile(uid, user);
             if (!profileSaved) {
                 console.error('Failed to save profile to Firestore');
+                // CLEANUP: Delete username document and auth user
+                try {
+                    await window.firestoreDeleteUsername(username);
+                    await auth.currentUser?.delete();
+                } catch (deleteError) {
+                    console.error('Failed to cleanup after profile save failure:', deleteError);
+                }
                 return { success: false, message: 'Failed to create account. Please try again.' };
             }
 
@@ -75,6 +95,23 @@ class StorageService {
 
         } catch (error) {
             console.error('Registration error:', error);
+
+            // CLEANUP: If we created username or auth user, clean them up
+            if (usernameCreated) {
+                try {
+                    await window.firestoreDeleteUsername(username);
+                } catch (deleteError) {
+                    console.error('Failed to cleanup username on error:', deleteError);
+                }
+            }
+            if (uid) {
+                try {
+                    const auth = window.firebaseAuth;
+                    await auth.currentUser?.delete();
+                } catch (deleteError) {
+                    console.error('Failed to cleanup auth user on error:', deleteError);
+                }
+            }
 
             // Provide user-friendly error messages
             if (error.code === 'auth/email-already-in-use') {
@@ -215,8 +252,7 @@ class StorageService {
      */
     isLoggedIn() {
         const auth = window.firebaseAuth;
-        if (auth && auth.currentUser) return true;
-        return this.getCurrentUser() !== null;
+        return !!(auth && auth.currentUser);
     }
 
     // ========================================================================
@@ -522,21 +558,7 @@ class StorageService {
                 return await window.firestoreImportUserData(uid, importData);
             }
 
-            const userJson = localStorage.getItem(`user_${uid}`);
-            if (!userJson) return { success: false };
-
-            const user = JSON.parse(userJson);
-            
-            // Merge imported data with existing
-            if (importData.profile) {
-                user.profile = {
-                    ...user.profile,
-                    ...importData.profile
-                };
-            }
-
-            localStorage.setItem(`user_${uid}`, JSON.stringify(user));
-            return { success: true };
+            return { success: false, message: 'Database connection unavailable' };
         } catch (error) {
             console.error('Error importing data:', error);
             return { success: false };

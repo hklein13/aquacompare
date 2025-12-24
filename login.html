@@ -40,14 +40,14 @@
 
             <form id="login-form" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        required 
-                        autocomplete="email"
-                        placeholder="you@example.com"
+                    <label for="identifier">Email or Username</label>
+                    <input
+                        type="text"
+                        id="identifier"
+                        name="identifier"
+                        required
+                        autocomplete="username"
+                        placeholder="username or email@example.com"
                     >
                 </div>
 
@@ -82,27 +82,53 @@
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script>
-        // Check if already logged in
-        if (authManager.isLoggedIn()) {
-            window.location.href = 'dashboard.html';
-        }
+        // Check if already logged in (wait for Firebase to initialize)
+        (async () => {
+            // Wait for Firebase to initialize
+            while (!window.firebaseAuthReady) {
+                await new Promise(resolve => setTimeout(resolve, 50));
+            }
+            const user = await window.firebaseAuthReady;
+
+            if (user) {
+                // Already logged in - redirect to dashboard
+                window.location.href = 'dashboard.html';
+            }
+        })();
 
         async function handleLogin(e) {
     e.preventDefault();
-    
-    const identifier = document.getElementById('email').value; // email or username
+
+    const messageDisplay = document.getElementById('message-display');
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const identifier = document.getElementById('identifier').value.trim();
     const password = document.getElementById('password').value;
+
+    // Clear previous messages
+    messageDisplay.innerHTML = '';
+
+    // Disable button during login
+    submitButton.disabled = true;
+    submitButton.textContent = 'Logging in...';
 
     try {
         const result = await authManager.login(identifier, password);
+
         if (result.success) {
-            alert('Login successful!');
-            window.location.href = 'dashboard.html';
+            messageDisplay.innerHTML = `<div class="success-message">${result.message} Redirecting...</div>`;
+            setTimeout(() => {
+                authManager.redirectAfterLogin();
+            }, 1000);
         } else {
-            alert('Login failed: ' + result.message);
+            messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Login';
         }
     } catch (error) {
-        alert('Login failed: ' + (error.message || error));
+        console.error('Login error:', error);
+        messageDisplay.innerHTML = `<div class="error-message">Login failed. Please try again.</div>`;
+        submitButton.disabled = false;
+        submitButton.textContent = 'Login';
     }
 }
 
