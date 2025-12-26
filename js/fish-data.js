@@ -2,6 +2,7 @@
             angelfish: {
                 commonName: "Freshwater Angelfish",
                 scientificName: "Pterophyllum scalare",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -21,6 +22,7 @@
             pearlDanio: {
                 commonName: "Pearl Danio",
                 scientificName: "Danio albolineatus",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 77,
                 tempUnit: "°F",
@@ -40,6 +42,7 @@
             neonTetra: {
                 commonName: "Neon Tetra",
                 scientificName: "Paracheirodon innesi",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 78,
                 tempUnit: "°F",
@@ -59,6 +62,7 @@
             celestialPearlDanio: {
                 commonName: "Celestial Pearl Danio",
                 scientificName: "Danio margaritatus",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 76,
                 tempUnit: "°F",
@@ -78,6 +82,7 @@
             corydoras: {
                 commonName: "Corydoras Catfish",
                 scientificName: "Corydoras spp.",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 78,
                 tempUnit: "°F",
@@ -97,6 +102,7 @@
             bettaFish: {
                 commonName: "Betta Fish",
                 scientificName: "Betta splendens",
+                imageUrl: null,
                 tempMin: 76,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -116,6 +122,7 @@
             guppy: {
                 commonName: "Guppy",
                 scientificName: "Poecilia reticulata",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -135,6 +142,7 @@
             molly: {
                 commonName: "Molly",
                 scientificName: "Poecilia sphenops",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -154,6 +162,7 @@
             platy: {
                 commonName: "Platy",
                 scientificName: "Xiphophorus maculatus",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -173,6 +182,7 @@
             swordtail: {
                 commonName: "Swordtail",
                 scientificName: "Xiphophorus hellerii",
+                imageUrl: null,
                 tempMin: 64,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -192,6 +202,7 @@
             endlersLivebearer: {
                 commonName: "Endler's Livebearer",
                 scientificName: "Poecilia wingei",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -211,6 +222,7 @@
             whiteCloudMinnow: {
                 commonName: "White Cloud Mountain Minnow",
                 scientificName: "Tanichthys albonubes",
+                imageUrl: null,
                 tempMin: 57,
                 tempMax: 72,
                 tempUnit: "°F",
@@ -230,6 +242,7 @@
             cardinalTetra: {
                 commonName: "Cardinal Tetra",
                 scientificName: "Paracheirodon axelrodi",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 84,
                 tempUnit: "°F",
@@ -249,6 +262,7 @@
             rummyNoseTetra: {
                 commonName: "Rummy Nose Tetra",
                 scientificName: "Hemigrammus rhodostomus",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 84,
                 tempUnit: "°F",
@@ -268,6 +282,7 @@
             emberTetra: {
                 commonName: "Ember Tetra",
                 scientificName: "Hyphessobrycon amandae",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -287,6 +302,7 @@
             glowlightTetra: {
                 commonName: "Glowlight Tetra",
                 scientificName: "Hemigrammus erythrozonus",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -306,6 +322,7 @@
             blackSkirtTetra: {
                 commonName: "Black Skirt Tetra",
                 scientificName: "Gymnocorymbus ternetzi",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -325,6 +342,7 @@
             cherryBarb: {
                 commonName: "Cherry Barb",
                 scientificName: "Puntius titteya",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 81,
                 tempUnit: "°F",
@@ -344,6 +362,7 @@
             tigerBarb: {
                 commonName: "Tiger Barb",
                 scientificName: "Puntigrus tetrazona",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -363,6 +382,7 @@
             zebraDanio: {
                 commonName: "Zebra Danio",
                 scientificName: "Danio rerio",
+                imageUrl: null,
                 tempMin: 64,
                 tempMax: 77,
                 tempUnit: "°F",
@@ -382,6 +402,7 @@
             harlequinRasbora: {
                 commonName: "Harlequin Rasbora",
                 scientificName: "Trigonostigma heteromorpha",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -401,6 +422,7 @@
             chiliRasbora: {
                 commonName: "Chili Rasbora",
                 scientificName: "Boraras brigittae",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -420,6 +442,7 @@
             dwarfGourami: {
                 commonName: "Dwarf Gourami",
                 scientificName: "Trichogaster lalius",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -439,6 +462,7 @@
             honeyGourami: {
                 commonName: "Honey Gourami",
                 scientificName: "Trichogaster chuna",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -458,6 +482,7 @@
             pearlGourami: {
                 commonName: "Pearl Gourami",
                 scientificName: "Trichopodus leerii",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -477,6 +502,7 @@
             sparklingGourami: {
                 commonName: "Sparkling Gourami",
                 scientificName: "Trichopsis pumila",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -496,6 +522,7 @@
             germanBlueRam: {
                 commonName: "German Blue Ram",
                 scientificName: "Mikrogeophagus ramirezi",
+                imageUrl: null,
                 tempMin: 78,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -515,6 +542,7 @@
             pandaCory: {
                 commonName: "Panda Cory",
                 scientificName: "Corydoras panda",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 77,
                 tempUnit: "°F",
@@ -534,6 +562,7 @@
             bronzeCory: {
                 commonName: "Bronze Cory",
                 scientificName: "Corydoras aeneus",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 81,
                 tempUnit: "°F",
@@ -553,6 +582,7 @@
             pygmyCory: {
                 commonName: "Pygmy Cory",
                 scientificName: "Corydoras pygmaeus",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -572,6 +602,7 @@
             kuhliLoach: {
                 commonName: "Kuhli Loach",
                 scientificName: "Pangio kuhlii",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -591,6 +622,7 @@
             otocinclus: {
                 commonName: "Otocinclus Catfish",
                 scientificName: "Otocinclus spp.",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -610,6 +642,7 @@
             bristlenosePleco: {
                 commonName: "Bristlenose Pleco",
                 scientificName: "Ancistrus spp.",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -629,6 +662,7 @@
             clownPleco: {
                 commonName: "Clown Pleco",
                 scientificName: "Panaqolus maccus",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -648,6 +682,7 @@
             rainbowShark: {
                 commonName: "Rainbow Shark",
                 scientificName: "Epalzeorhynchos frenatum",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -667,6 +702,7 @@
             cherryShrimp: {
                 commonName: "Cherry Shrimp",
                 scientificName: "Neocaridina davidi",
+                imageUrl: null,
                 tempMin: 65,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -686,6 +722,7 @@
             amanoShrimp: {
                 commonName: "Amano Shrimp",
                 scientificName: "Caridina multidentata",
+                imageUrl: null,
                 tempMin: 65,
                 tempMax: 85,
                 tempUnit: "°F",
@@ -705,6 +742,7 @@
             ghostShrimp: {
                 commonName: "Ghost Shrimp",
                 scientificName: "Palaemonetes paludosus",
+                imageUrl: null,
                 tempMin: 65,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -724,6 +762,7 @@
             mysterySnail: {
                 commonName: "Mystery Snail",
                 scientificName: "Pomacea bridgesii",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 84,
                 tempUnit: "°F",
@@ -743,6 +782,7 @@
             neriteSnail: {
                 commonName: "Nerite Snail",
                 scientificName: "Neritina spp.",
+                imageUrl: null,
                 tempMin: 65,
                 tempMax: 85,
                 tempUnit: "°F",
@@ -764,6 +804,7 @@
             blackNeonTetra: {
                 commonName: "Black Neon Tetra",
                 scientificName: "Hyphessobrycon herbertaxelrodi",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -783,6 +824,7 @@
             buenosAiresTetra: {
                 commonName: "Buenos Aires Tetra",
                 scientificName: "Hyphessobrycon anisitsi",
+                imageUrl: null,
                 tempMin: 64,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -802,6 +844,7 @@
             bloodfinTetra: {
                 commonName: "Bloodfin Tetra",
                 scientificName: "Aphyocharax anisitsi",
+                imageUrl: null,
                 tempMin: 64,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -821,6 +864,7 @@
             congoTetra: {
                 commonName: "Congo Tetra",
                 scientificName: "Phenacogrammus interruptus",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -840,6 +884,7 @@
             lemonTetra: {
                 commonName: "Lemon Tetra",
                 scientificName: "Hyphessobrycon pulchripinnis",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -859,6 +904,7 @@
             serpaeTetra: {
                 commonName: "Serpae Tetra",
                 scientificName: "Hyphessobrycon eques",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -878,6 +924,7 @@
             diamondTetra: {
                 commonName: "Diamond Tetra",
                 scientificName: "Moenkhausia pittieri",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -897,6 +944,7 @@
             xRayTetra: {
                 commonName: "X-Ray Tetra",
                 scientificName: "Pristella maxillaris",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -916,6 +964,7 @@
             penguinTetra: {
                 commonName: "Penguin Tetra",
                 scientificName: "Thayeria boehlkei",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -935,6 +984,7 @@
             silverDollar: {
                 commonName: "Silver Dollar",
                 scientificName: "Metynnis argenteus",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -954,6 +1004,7 @@
             greenNeonTetra: {
                 commonName: "Green Neon Tetra",
                 scientificName: "Paracheirodon simulans",
+                imageUrl: null,
                 tempMin: 76,
                 tempMax: 81,
                 tempUnit: "°F",
@@ -975,6 +1026,7 @@
             rosyBarb: {
                 commonName: "Rosy Barb",
                 scientificName: "Pethia conchonius",
+                imageUrl: null,
                 tempMin: 61,
                 tempMax: 75,
                 tempUnit: "°F",
@@ -994,6 +1046,7 @@
             goldBarb: {
                 commonName: "Gold Barb",
                 scientificName: "Barbodes semifasciolatus",
+                imageUrl: null,
                 tempMin: 61,
                 tempMax: 75,
                 tempUnit: "°F",
@@ -1013,6 +1066,7 @@
             odessaBarb: {
                 commonName: "Odessa Barb",
                 scientificName: "Pethia padamya",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -1032,6 +1086,7 @@
             denisonBarb: {
                 commonName: "Denison Barb",
                 scientificName: "Sahyadria denisonii",
+                imageUrl: null,
                 tempMin: 59,
                 tempMax: 77,
                 tempUnit: "°F",
@@ -1051,6 +1106,7 @@
             fiveBandedBarb: {
                 commonName: "Five-Banded Barb",
                 scientificName: "Desmopuntius pentazona",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -1072,6 +1128,7 @@
             boesemansRainbowfish: {
                 commonName: "Boeseman's Rainbowfish",
                 scientificName: "Melanotaenia boesemani",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -1091,6 +1148,7 @@
             dwarfNeonRainbowfish: {
                 commonName: "Dwarf Neon Rainbowfish",
                 scientificName: "Melanotaenia praecox",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1110,6 +1168,7 @@
             turquoiseRainbowfish: {
                 commonName: "Turquoise Rainbowfish",
                 scientificName: "Melanotaenia lacustris",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 77,
                 tempUnit: "°F",
@@ -1129,6 +1188,7 @@
             redRainbowfish: {
                 commonName: "Red Rainbowfish",
                 scientificName: "Glossolepis incisus",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1148,6 +1208,7 @@
             threadfinRainbowfish: {
                 commonName: "Threadfin Rainbowfish",
                 scientificName: "Iriatherina werneri",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -1169,6 +1230,7 @@
             exclamationPointRasbora: {
                 commonName: "Exclamation Point Rasbora",
                 scientificName: "Boraras urophthalmoides",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 81,
                 tempUnit: "°F",
@@ -1188,6 +1250,7 @@
             microrasbora: {
                 commonName: "Green Kubotai Rasbora",
                 scientificName: "Microdevario kubotai",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 81,
                 tempUnit: "°F",
@@ -1209,6 +1272,7 @@
             balloonMolly: {
                 commonName: "Balloon Molly",
                 scientificName: "Poecilia sphenops (balloon morph)",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1228,6 +1292,7 @@
             variatusPlaty: {
                 commonName: "Variatus Platy",
                 scientificName: "Xiphophorus variatus",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -1247,6 +1312,7 @@
             blackMolly: {
                 commonName: "Black Molly",
                 scientificName: "Poecilia sphenops (melanistic)",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1266,6 +1332,7 @@
             leastKillifish: {
                 commonName: "Least Killifish",
                 scientificName: "Heterandria formosa",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 78,
                 tempUnit: "°F",
@@ -1287,6 +1354,7 @@
             threeSpotGourami: {
                 commonName: "Three Spot Gourami",
                 scientificName: "Trichopodus trichopterus",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -1306,6 +1374,7 @@
             chocolateGourami: {
                 commonName: "Chocolate Gourami",
                 scientificName: "Sphaerichthys osphromenoides",
+                imageUrl: null,
                 tempMin: 79,
                 tempMax: 88,
                 tempUnit: "°F",
@@ -1325,6 +1394,7 @@
             paradiseFish: {
                 commonName: "Paradise Fish",
                 scientificName: "Macropodus opercularis",
+                imageUrl: null,
                 tempMin: 61,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -1344,6 +1414,7 @@
             bettaImbellis: {
                 commonName: "Peaceful Betta",
                 scientificName: "Betta imbellis",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1365,6 +1436,7 @@
             kribensis: {
                 commonName: "Kribensis",
                 scientificName: "Pelvicachromis pulcher",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 81,
                 tempUnit: "°F",
@@ -1384,6 +1456,7 @@
             bolivianRam: {
                 commonName: "Bolivian Ram",
                 scientificName: "Mikrogeophagus altispinosus",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1403,6 +1476,7 @@
             cockatooDwarfCichlid: {
                 commonName: "Cockatoo Dwarf Cichlid",
                 scientificName: "Apistogramma cacatuoides",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 84,
                 tempUnit: "°F",
@@ -1422,6 +1496,7 @@
             electricBlueAcara: {
                 commonName: "Electric Blue Acara",
                 scientificName: "Andinoacara pulcher",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1441,6 +1516,7 @@
             firemouthCichlid: {
                 commonName: "Firemouth Cichlid",
                 scientificName: "Thorichthys meeki",
+                imageUrl: null,
                 tempMin: 76,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1460,6 +1536,7 @@
             convictCichlid: {
                 commonName: "Convict Cichlid",
                 scientificName: "Amatitlania nigrofasciata",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1479,6 +1556,7 @@
             africanButterflyCichlid: {
                 commonName: "African Butterfly Cichlid",
                 scientificName: "Anomalochromis thomasi",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1498,6 +1576,7 @@
             discus: {
                 commonName: "Discus",
                 scientificName: "Symphysodon aequifasciatus",
+                imageUrl: null,
                 tempMin: 82,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -1519,6 +1598,7 @@
             yoyoLoach: {
                 commonName: "Yoyo Loach",
                 scientificName: "Botia almorhae",
+                imageUrl: null,
                 tempMin: 66,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1538,6 +1618,7 @@
             dwarfChainLoach: {
                 commonName: "Dwarf Chain Loach",
                 scientificName: "Ambastaia sidthimunki",
+                imageUrl: null,
                 tempMin: 68,
                 tempMax: 77,
                 tempUnit: "°F",
@@ -1557,6 +1638,7 @@
             zebraLoach: {
                 commonName: "Zebra Loach",
                 scientificName: "Botia striata",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -1576,6 +1658,7 @@
             clownLoach: {
                 commonName: "Clown Loach",
                 scientificName: "Chromobotia macracanthus",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -1595,6 +1678,7 @@
             hillstreamLoach: {
                 commonName: "Hillstream Loach",
                 scientificName: "Sewellia lineolata",
+                imageUrl: null,
                 tempMin: 65,
                 tempMax: 75,
                 tempUnit: "°F",
@@ -1616,6 +1700,7 @@
             pepperedCory: {
                 commonName: "Peppered Cory",
                 scientificName: "Corydoras paleatus",
+                imageUrl: null,
                 tempMin: 60,
                 tempMax: 78,
                 tempUnit: "°F",
@@ -1635,6 +1720,7 @@
             sterbaiCory: {
                 commonName: "Sterbai Cory",
                 scientificName: "Corydoras sterbai",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1654,6 +1740,7 @@
             juliiCory: {
                 commonName: "Julii Cory",
                 scientificName: "Corydoras julii",
+                imageUrl: null,
                 tempMin: 73,
                 tempMax: 79,
                 tempUnit: "°F",
@@ -1673,6 +1760,7 @@
             albinoCory: {
                 commonName: "Albino Cory",
                 scientificName: "Corydoras aeneus (albino)",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -1692,6 +1780,7 @@
             saltAndPepperCory: {
                 commonName: "Salt and Pepper Cory",
                 scientificName: "Corydoras habrosus",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -1713,6 +1802,7 @@
             chineseAlgaeEater: {
                 commonName: "Chinese Algae Eater",
                 scientificName: "Gyrinocheilus aymonieri",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1732,6 +1822,7 @@
             stripedRaphaelCatfish: {
                 commonName: "Striped Raphael Catfish",
                 scientificName: "Platydoras armatulus",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1751,6 +1842,7 @@
             glassCatfish: {
                 commonName: "Glass Catfish",
                 scientificName: "Kryptopterus vitreolus",
+                imageUrl: null,
                 tempMin: 75,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -1770,6 +1862,7 @@
             upsideDownCatfish: {
                 commonName: "Upside-Down Catfish",
                 scientificName: "Synodontis nigriventris",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1789,6 +1882,7 @@
             commonPleco: {
                 commonName: "Common Pleco",
                 scientificName: "Hypostomus plecostomus",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 86,
                 tempUnit: "°F",
@@ -1808,6 +1902,7 @@
             rubberLipPleco: {
                 commonName: "Rubber Lip Pleco",
                 scientificName: "Chaetostoma milesi",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 78,
                 tempUnit: "°F",
@@ -1829,6 +1924,7 @@
             bambooShrimp: {
                 commonName: "Bamboo Shrimp",
                 scientificName: "Atyopsis moluccensis",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 78,
                 tempUnit: "°F",
@@ -1848,6 +1944,7 @@
             singaporeShrimp: {
                 commonName: "Singapore Shrimp",
                 scientificName: "Macrobrachium lanchesteri",
+                imageUrl: null,
                 tempMin: 70,
                 tempMax: 82,
                 tempUnit: "°F",
@@ -1869,6 +1966,7 @@
             ramshornSnail: {
                 commonName: "Ramshorn Snail",
                 scientificName: "Planorbidae family",
+                imageUrl: null,
                 tempMin: 60,
                 tempMax: 80,
                 tempUnit: "°F",
@@ -1890,6 +1988,7 @@
             africanDwarfFrog: {
                 commonName: "African Dwarf Frog",
                 scientificName: "Hymenochirus boettgeri",
+                imageUrl: null,
                 tempMin: 72,
                 tempMax: 82,
                 tempUnit: "°F",

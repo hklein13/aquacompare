@@ -28,6 +28,7 @@ class GlossaryManager {
                 title: 'Species',
                 icon: '🐟',
                 description: 'Fish species information and care guides',
+                imageUrl: null,
                 firestoreSubcollection: 'species_entries' // For future Firestore migration
             },
             {
@@ -35,6 +36,7 @@ class GlossaryManager {
                 title: 'Diseases',
                 icon: '🏥',
                 description: 'Common fish diseases and treatments',
+                imageUrl: null,
                 firestoreSubcollection: 'disease_entries'
             },
             {
@@ -42,6 +44,7 @@ class GlossaryManager {
                 title: 'Equipment',
                 icon: '🔧',
                 description: 'Aquarium equipment and supplies',
+                imageUrl: null,
                 firestoreSubcollection: 'equipment_entries'
             },
             {
@@ -49,6 +52,7 @@ class GlossaryManager {
                 title: 'Terminology',
                 icon: '📖',
                 description: 'Aquarium terms and definitions',
+                imageUrl: null,
                 firestoreSubcollection: 'terminology_entries'
             }
         ];
@@ -66,6 +70,7 @@ class GlossaryManager {
                     title: 'Neon Tetra',
                     scientificName: 'Paracheirodon innesi',
                     description: 'A small, peaceful freshwater fish known for its bright blue and red coloration. Native to South American blackwater streams. Perfect for community tanks and schooling behavior.',
+                    imageUrl: null,
                     tags: ['Beginner Friendly', 'Schooling Fish', 'Peaceful', 'Small'],
                     category: 'species',
                     author: 'System',
@@ -81,6 +86,7 @@ class GlossaryManager {
                     title: 'Betta Fish (Siamese Fighting Fish)',
                     scientificName: 'Betta splendens',
                     description: 'A colorful labyrinth fish known for its flowing fins and territorial behavior. Males are aggressive toward other males. Can breathe air from the surface. Prefers warm water (76-82°F).',
+                    imageUrl: null,
                     tags: ['Colorful', 'Territorial', 'Labyrinth Fish', 'Easy Care'],
                     category: 'species',
                     author: 'System',
@@ -95,6 +101,7 @@ class GlossaryManager {
                     title: 'Corydoras Catfish',
                     scientificName: 'Corydoras spp.',
                     description: 'Bottom-dwelling catfish that help keep substrate clean. Social fish that should be kept in groups of 6+. Very peaceful and great for community tanks. Multiple species available.',
+                    imageUrl: null,
                     tags: ['Bottom Dweller', 'Schooling Fish', 'Peaceful', 'Algae Eater'],
                     category: 'species',
                     author: 'System',
@@ -111,6 +118,7 @@ class GlossaryManager {
                     title: 'Ich (White Spot Disease)',
                     scientificName: 'Ichthyophthirius multifiliis',
                     description: 'A common parasitic disease that appears as white spots on fish bodies and fins. Caused by stress, poor water quality, or temperature fluctuations. Highly contagious but treatable with medication and temperature increase.',
+                    imageUrl: null,
                     tags: ['Parasitic', 'Contagious', 'Treatable', 'Common'],
                     category: 'diseases',
                     author: 'System',
@@ -125,6 +133,7 @@ class GlossaryManager {
                     title: 'Fin Rot',
                     scientificName: 'Various bacterial infections',
                     description: 'Bacterial infection causing fins to appear ragged, torn, or discolored. Often starts at the edges and progresses inward. Caused by poor water quality, stress, or injury. Treat with antibacterial medication and water changes.',
+                    imageUrl: null,
                     tags: ['Bacterial', 'Water Quality', 'Treatable', 'Common'],
                     category: 'diseases',
                     author: 'System',
@@ -139,6 +148,7 @@ class GlossaryManager {
                     title: 'Dropsy',
                     scientificName: 'Various bacterial infections',
                     description: 'Serious condition where fish appear swollen with protruding scales (pinecone appearance). Usually caused by internal bacterial infection. Difficult to treat; often requires antibiotics and salt baths. Quarantine affected fish immediately.',
+                    imageUrl: null,
                     tags: ['Bacterial', 'Serious', 'Difficult to Treat', 'Quarantine'],
                     category: 'diseases',
                     author: 'System',
@@ -155,6 +165,7 @@ class GlossaryManager {
                     title: 'Aquarium Filter',
                     scientificName: null,
                     description: 'Essential equipment that removes debris and maintains water quality through mechanical, chemical, and biological filtration. Types include hang-on-back (HOB), canister, sponge, and internal filters. Choose based on tank size and bioload.',
+                    imageUrl: null,
                     tags: ['Essential', 'Water Quality', 'Various Types', 'Maintenance'],
                     category: 'equipment',
                     author: 'System',
@@ -169,6 +180,7 @@ class GlossaryManager {
                     title: 'Aquarium Heater',
                     scientificName: null,
                     description: 'Device that maintains stable water temperature for tropical fish. Most tropical species need 75-80°F. Choose wattage based on tank size (typically 3-5 watts per gallon). Always use a thermometer to monitor temperature.',
+                    imageUrl: null,
                     tags: ['Essential', 'Temperature Control', 'Tropical Fish', 'Safety'],
                     category: 'equipment',
                     author: 'System',
@@ -183,6 +195,7 @@ class GlossaryManager {
                     title: 'Water Test Kit',
                     scientificName: null,
                     description: 'Tools to measure water parameters including pH, ammonia, nitrite, and nitrate levels. Essential for monitoring water quality and cycling new tanks. Available in liquid (more accurate) or strip forms.',
+                    imageUrl: null,
                     tags: ['Essential', 'Water Quality', 'Monitoring', 'Cycling'],
                     category: 'equipment',
                     author: 'System',
@@ -199,6 +212,7 @@ class GlossaryManager {
                     title: 'Nitrogen Cycle',
                     scientificName: null,
                     description: 'The biological process where beneficial bacteria convert toxic ammonia (from fish waste) into nitrite, then into less toxic nitrate. Essential for establishing a healthy aquarium. Takes 4-8 weeks to complete in new tanks.',
+                    imageUrl: null,
                     tags: ['Water Chemistry', 'Cycling', 'Essential Knowledge', 'Beneficial Bacteria'],
                     category: 'terminology',
                     author: 'System',
@@ -213,6 +227,7 @@ class GlossaryManager {
                     title: 'Bioload',
                     scientificName: null,
                     description: 'The total amount of waste produced by all living organisms in the aquarium. Higher bioload requires better filtration and more frequent water changes. Measured by the "one inch of fish per gallon" rule (though this is oversimplified).',
+                    imageUrl: null,
                     tags: ['Stocking', 'Water Quality', 'Filtration', 'Tank Management'],
                     category: 'terminology',
                     author: 'System',
@@ -227,6 +242,7 @@ class GlossaryManager {
                     title: 'Quarantine Tank',
                     scientificName: null,
                     description: 'A separate tank used to isolate new fish or sick fish from the main display tank. Prevents disease spread and allows observation of new arrivals. Recommended to quarantine for 2-4 weeks before introducing fish to main tank.',
+                    imageUrl: null,
                     tags: ['Disease Prevention', 'Best Practice', 'Separate Tank', 'Health'],
                     category: 'terminology',
                     author: 'System',
