@@ -23,6 +23,9 @@ test.describe('Complete User Flow', () => {
     await test.step('Navigate to signup page', async () => {
       await page.goto('/signup.html');
       await expect(page).toHaveTitle(/Sign Up.*Comparium/i);
+
+      // Wait for Firebase to load (check if window.firebaseAuth exists)
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
     });
 
     await test.step('Register new user account', async () => {
@@ -30,6 +33,7 @@ test.describe('Complete User Flow', () => {
       await page.fill('#username', testUser.username);
       await page.fill('#email', testUser.email);
       await page.fill('#password', testUser.password);
+      await page.fill('#confirm-password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -144,6 +148,9 @@ test.describe('Complete User Flow', () => {
     await test.step('Navigate to login page', async () => {
       await page.goto('/login.html');
       await expect(page).toHaveTitle(/Login.*Comparium/i);
+
+      // Wait for Firebase to load
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
     });
 
     await test.step('Login with existing credentials', async () => {
@@ -232,10 +239,14 @@ test.describe('Authentication Edge Cases', () => {
     await test.step('Attempt to register with existing username', async () => {
       await page.goto('/signup.html');
 
+      // Wait for Firebase to load
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
+
       // Try to register with the same username from previous test
       await page.fill('#username', testUser.username);
       await page.fill('#email', `different${timestamp}@example.com`);
       await page.fill('#password', testUser.password);
+      await page.fill('#confirm-password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -250,6 +261,9 @@ test.describe('Authentication Edge Cases', () => {
   test('should handle invalid login credentials', async ({ page }) => {
     await test.step('Attempt login with wrong password', async () => {
       await page.goto('/login.html');
+
+      // Wait for Firebase to load
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
 
       await page.fill('#identifier', testUser.username);
       await page.fill('#password', 'WrongPassword123!');
