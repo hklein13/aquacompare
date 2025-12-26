@@ -1,5 +1,139 @@
 // Comparium - Application Logic
 
+// ============================================================================
+// FISH DATA LOADING - Firestore Integration
+// ============================================================================
+// fishDatabase will be populated either from:
+// 1. Firestore (preferred) - loaded async on page load
+// 2. fish-data.js (fallback) - if Firestore is unavailable
+// ============================================================================
+
+let fishDatabase = {}; // Will be populated from Firestore or fallback
+
+/**
+ * Load fish species data from Firestore
+ * @returns {Promise<Object>} Fish database object
+ */
+async function loadFishFromFirestore() {
+    try {
+        // Wait for Firebase to initialize with timeout
+        const firebaseTimeout = new Promise((_, reject) =>
+            setTimeout(() => reject(new Error('Firebase initialization timeout')), 10000)
+        );
+
+        // Wait for firebaseAuthReady to be defined
+        let attempts = 0;
+        while (!window.firebaseAuthReady && attempts < 200) {
+            await new Promise(resolve => setTimeout(resolve, 50));
+            attempts++;
+        }
+
+        if (!window.firebaseAuthReady) {
+            console.warn('Firebase not initialized, using fallback fish data');
+            return window.fishDatabase || {}; // Fallback to fish-data.js
+        }
+
+        // Wait for Firebase initialization to complete or timeout
+        await Promise.race([
+            window.firebaseAuthReady,
+            firebaseTimeout
+        ]);
+
+        // Import Firestore functions
+        const { getFirestore, collection, getDocs } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js');
+        const db = getFirestore();
+
+        // Fetch all species from Firestore
+        const speciesCollection = collection(db, 'species');
+        const snapshot = await getDocs(speciesCollection);
+
+        if (snapshot.empty) {
+            console.warn('No species found in Firestore, using fallback data');
+            return window.fishDatabase || {};
+        }
+
+        // Convert Firestore documents to fishDatabase format
+        const firestoreData = {};
+        snapshot.docs.forEach(doc => {
+            firestoreData[doc.id] = doc.data();
+        });
+
+        console.log(`✅ Loaded ${snapshot.size} species from Firestore`);
+        return firestoreData;
+
+    } catch (error) {
+        console.error('Error loading from Firestore, using fallback data:', error);
+        return window.fishDatabase || {};
+    }
+}
+
+/**
+ * Initialize the app - load data and build UI
+ */
+async function initializeApp() {
+    try {
+        // Show loading state
+        const panels = document.querySelectorAll('.species-panel');
+        panels.forEach(panel => {
+            panel.innerHTML = '<div style="padding: 1rem; text-align: center; color: #999;">Loading species...</div>';
+        });
+
+        // Load fish data
+        fishDatabase = await loadFishFromFirestore();
+
+        // Verify we have data
+        if (!fishDatabase || Object.keys(fishDatabase).length === 0) {
+            throw new Error('No fish species data available');
+        }
+
+        // Build the UI with loaded data
+        buildPanels();
+
+        console.log('✅ App initialized with', Object.keys(fishDatabase).length, 'species');
+    } catch (error) {
+        console.error('Error initializing app:', error);
+        showAppErrorState('Unable to load fish species data. Please <a href="javascript:location.reload()">refresh the page</a> or try again later.');
+    }
+}
+
+function showAppErrorState(message) {
+    const panels = document.querySelectorAll('.species-panel');
+    panels.forEach(panel => {
+        panel.innerHTML = `
+            <div style="padding: 2rem; text-align: center;">
+                <p style="color: #dc3545; font-weight: bold; margin-bottom: 1rem;">⚠️ Error</p>
+                <p style="color: #666; margin: 0;">${message}</p>
+            </div>
+        `;
+    });
+
+    // Also show error in comparison grid if it exists
+    const comparisonGrid = document.getElementById('comparisonGrid');
+    if (comparisonGrid) {
+        comparisonGrid.innerHTML = `
+            <div class="empty-state">
+                <h3>Unable to Load Data</h3>
+                <p>${message}</p>
+            </div>
+        `;
+    }
+}
+
+// Auto-initialize when DOM is ready with error handling
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeApp().catch(error => {
+            console.error('Fatal initialization error:', error);
+            showAppErrorState('Critical error loading application. Please refresh the page.');
+        });
+    });
+} else {
+    initializeApp().catch(error => {
+        console.error('Fatal initialization error:', error);
+        showAppErrorState('Critical error loading application. Please refresh the page.');
+    });
+}
+
 // Fish categories for organized display
 const fishCategories = {
     "Tetras & Characins": ["neonTetra", "cardinalTetra", "greenNeonTetra", "rummyNoseTetra", "emberTetra", "glowlightTetra", "blackSkirtTetra", "blackNeonTetra", "buenosAiresTetra", "bloodfinTetra", "congoTetra", "lemonTetra", "serpaeTetra", "diamondTetra", "xRayTetra", "penguinTetra", "silverDollar"],

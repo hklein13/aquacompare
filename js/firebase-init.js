@@ -247,17 +247,17 @@ window.firestoreImportUserData = async (uid, importData) => {
 /**
  * Check if a username already exists in the usernames collection
  * @param {string} username - Username to check
- * @returns {Promise<boolean>} - True if username exists, false otherwise
+ * @returns {Promise<{error: boolean, exists: boolean}>} - Object with error state and existence
  */
 window.firestoreUsernameExists = async (username) => {
-  if (!firestore) return false;
+  if (!firestore) return { error: true, exists: false };
   try {
     const ref = doc(firestore, 'usernames', username);
     const snap = await getDoc(ref);
-    return snap.exists();
+    return { error: false, exists: snap.exists() };
   } catch (e) {
     console.error('firestoreUsernameExists error:', e);
-    return false;
+    return { error: true, exists: false };
   }
 };
 
@@ -302,6 +302,23 @@ window.firestoreGetUidByUsername = async (username) => {
   } catch (e) {
     console.error('firestoreGetUidByUsername error:', e);
     return null;
+  }
+};
+
+/**
+ * Delete a username mapping (for cleanup during failed registration)
+ * @param {string} username - Username to delete
+ * @returns {Promise<boolean>} - True if deleted successfully, false otherwise
+ */
+window.firestoreDeleteUsername = async (username) => {
+  if (!firestore) return false;
+  try {
+    const ref = doc(firestore, 'usernames', username);
+    await deleteDoc(ref);
+    return true;
+  } catch (e) {
+    console.error('firestoreDeleteUsername error:', e);
+    return false;
   }
 };
 

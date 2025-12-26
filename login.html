@@ -40,14 +40,14 @@
 
             <form id="login-form" onsubmit="handleLogin(event)">
                 <div class="form-group">
-                    <label for="email">Email</label>
-                    <input 
-                        type="email" 
-                        id="email" 
-                        name="email" 
-                        required 
-                        autocomplete="email"
-                        placeholder="you@example.com"
+                    <label for="identifier">Email or Username</label>
+                    <input
+                        type="text"
+                        id="identifier"
+                        name="identifier"
+                        required
+                        autocomplete="username"
+                        placeholder="username or email@example.com"
                     >
                 </div>
 
@@ -82,27 +82,76 @@
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script>
-        // Check if already logged in
-        if (authManager.isLoggedIn()) {
-            window.location.href = 'dashboard.html';
-        }
+        // Check if already logged in (wait for Firebase to initialize)
+        (async () => {
+            try {
+                // Wait for Firebase to initialize with timeout (5 seconds)
+                const firebaseTimeout = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Firebase initialization timeout')), 5000)
+                );
+
+                // Wait for firebaseAuthReady to be defined
+                let attempts = 0;
+                while (!window.firebaseAuthReady && attempts < 100) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    attempts++;
+                }
+
+                if (!window.firebaseAuthReady) {
+                    console.warn('Firebase did not initialize - login form will still work');
+                    return;
+                }
+
+                // Wait for Firebase to complete initialization or timeout
+                const user = await Promise.race([
+                    window.firebaseAuthReady,
+                    firebaseTimeout
+                ]);
+
+                if (user) {
+                    // Already logged in - redirect to dashboard
+                    window.location.href = 'dashboard.html';
+                }
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                // Allow user to proceed with login form even if Firebase fails to initialize
+                // The form will show appropriate errors when they try to log in
+            }
+        })();
 
         async function handleLogin(e) {
     e.preventDefault();
-    
-    const identifier = document.getElementById('email').value; // email or username
+
+    const messageDisplay = document.getElementById('message-display');
+    const submitButton = e.target.querySelector('button[type="submit"]');
+    const identifier = document.getElementById('identifier').value.trim();
     const password = document.getElementById('password').value;
+
+    // Clear previous messages
+    messageDisplay.innerHTML = '';
+
+    // Disable button during login
+    submitButton.disabled = true;
+    submitButton.textContent = 'Logging in...';
 
     try {
         const result = await authManager.login(identifier, password);
+
         if (result.success) {
-            alert('Login successful!');
-            window.location.href = 'dashboard.html';
+            messageDisplay.innerHTML = `<div class="success-message">${result.message} Redirecting...</div>`;
+            setTimeout(() => {
+                authManager.redirectAfterLogin();
+            }, 1000);
         } else {
-            alert('Login failed: ' + result.message);
+            messageDisplay.innerHTML = `<div class="error-message">${result.message}</div>`;
+            submitButton.disabled = false;
+            submitButton.textContent = 'Login';
         }
     } catch (error) {
-        alert('Login failed: ' + (error.message || error));
+        console.error('Login error:', error);
+        messageDisplay.innerHTML = `<div class="error-message">Login failed. Please try again.</div>`;
+        submitButton.disabled = false;
+        submitButton.textContent = 'Login';
     }
 }
 

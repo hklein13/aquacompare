@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test');
+import { test, expect } from '@playwright/test';
 
 /**
  * Comprehensive E2E Test Suite for Comparium
@@ -23,13 +23,17 @@ test.describe('Complete User Flow', () => {
     await test.step('Navigate to signup page', async () => {
       await page.goto('/signup.html');
       await expect(page).toHaveTitle(/Sign Up.*Comparium/i);
+
+      // Wait for Firebase to load (check if window.firebaseAuth exists)
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
     });
 
     await test.step('Register new user account', async () => {
       // Fill registration form
-      await page.fill('#signup-username', testUser.username);
-      await page.fill('#signup-email', testUser.email);
-      await page.fill('#signup-password', testUser.password);
+      await page.fill('#username', testUser.username);
+      await page.fill('#email', testUser.email);
+      await page.fill('#password', testUser.password);
+      await page.fill('#confirm-password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -144,12 +148,15 @@ test.describe('Complete User Flow', () => {
     await test.step('Navigate to login page', async () => {
       await page.goto('/login.html');
       await expect(page).toHaveTitle(/Login.*Comparium/i);
+
+      // Wait for Firebase to load
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
     });
 
     await test.step('Login with existing credentials', async () => {
       // Fill login form
-      await page.fill('#login-username', testUser.username);
-      await page.fill('#login-password', testUser.password);
+      await page.fill('#identifier', testUser.username);
+      await page.fill('#password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -232,10 +239,14 @@ test.describe('Authentication Edge Cases', () => {
     await test.step('Attempt to register with existing username', async () => {
       await page.goto('/signup.html');
 
+      // Wait for Firebase to load
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
+
       // Try to register with the same username from previous test
-      await page.fill('#signup-username', testUser.username);
-      await page.fill('#signup-email', `different${timestamp}@example.com`);
-      await page.fill('#signup-password', testUser.password);
+      await page.fill('#username', testUser.username);
+      await page.fill('#email', `different${timestamp}@example.com`);
+      await page.fill('#password', testUser.password);
+      await page.fill('#confirm-password', testUser.password);
 
       // Submit form
       await page.click('button[type="submit"]');
@@ -251,8 +262,11 @@ test.describe('Authentication Edge Cases', () => {
     await test.step('Attempt login with wrong password', async () => {
       await page.goto('/login.html');
 
-      await page.fill('#login-username', testUser.username);
-      await page.fill('#login-password', 'WrongPassword123!');
+      // Wait for Firebase to load
+      await page.waitForFunction(() => window.firebaseAuth !== undefined, { timeout: 10000 });
+
+      await page.fill('#identifier', testUser.username);
+      await page.fill('#password', 'WrongPassword123!');
 
       await page.click('button[type="submit"]');
 

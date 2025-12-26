@@ -1,11 +1,11 @@
 // @ts-check
-const { defineConfig, devices } = require('@playwright/test');
+import { defineConfig, devices } from '@playwright/test';
 
 /**
  * Playwright configuration for Comparium E2E tests
  * @see https://playwright.dev/docs/test-configuration
  */
-module.exports = defineConfig({
+export default defineConfig({
   testDir: './tests',
 
   // Maximum time one test can run
@@ -26,7 +26,7 @@ module.exports = defineConfig({
   // Shared settings for all projects
   use: {
     // Base URL for tests
-    baseURL: process.env.TEST_URL || 'https://comparium.net',
+    baseURL: process.env.TEST_URL || 'http://localhost:8080',
 
     // Collect trace on failure for debugging
     trace: 'on-first-retry',
@@ -48,7 +48,7 @@ module.exports = defineConfig({
 
   // Run local dev server if TEST_URL is not set
   webServer: process.env.TEST_URL ? undefined : {
-    command: 'python3 -m http.server 8080',
+    command: 'npx http-server -p 8080 -c-1',
     port: 8080,
     reuseExistingServer: true,
     timeout: 10 * 1000,

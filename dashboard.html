@@ -106,56 +106,95 @@
     <script>
         // PRODUCTION: Proper auth check using Firebase's event system
         (async () => {
-            // Module scripts are deferred - wait for firebase-init.js to load
-            while (!window.firebaseAuthReady) {
-                await new Promise(resolve => setTimeout(resolve, 50));
+            try {
+                // Wait for Firebase to initialize with timeout
+                const firebaseTimeout = new Promise((_, reject) =>
+                    setTimeout(() => reject(new Error('Firebase initialization timeout')), 10000)
+                );
+
+                // Wait for firebaseAuthReady to be defined
+                let attempts = 0;
+                while (!window.firebaseAuthReady && attempts < 200) {
+                    await new Promise(resolve => setTimeout(resolve, 50));
+                    attempts++;
+                }
+
+                if (!window.firebaseAuthReady) {
+                    throw new Error('Firebase failed to initialize');
+                }
+
+                // Wait for Firebase Auth to complete its initial state check or timeout
+                const user = await Promise.race([
+                    window.firebaseAuthReady,
+                    firebaseTimeout
+                ]);
+
+                if (!user) {
+                    // Not authenticated - redirect to login
+                    console.log('Not authenticated, redirecting to login');
+                    window.location.href = 'login.html';
+                    return;
+                }
+
+                // User is authenticated - load dashboard
+                await loadDashboard(user);
+            } catch (error) {
+                console.error('Dashboard initialization error:', error);
+                showErrorState('Unable to load dashboard. Please check your connection and <a href="javascript:location.reload()">refresh the page</a>.');
             }
-
-            // Now wait for Firebase Auth to complete its initial state check
-            const user = await window.firebaseAuthReady;
-
-            if (!user) {
-                // Not authenticated - redirect to login
-                console.log('Not authenticated, redirecting to login');
-                window.location.href = 'login.html';
-                return;
-            }
-
-            // User is authenticated - load dashboard
-            await loadDashboard(user);
         })();
 
-        async function loadDashboard(user) {
-            // Load profile directly using Firebase Auth UID
-            const profile = await window.firestoreGetProfile(user.uid);
-
-            if (!profile) {
-                console.error('Profile not found');
-                window.location.href = 'login.html';
-                return;
+        function showErrorState(message) {
+            const container = document.querySelector('.dashboard-container');
+            if (container) {
+                container.innerHTML = `
+                    <div class="dashboard-section" style="text-align: center; padding: 3rem;">
+                        <h2 style="color: #dc3545;">⚠️ Error Loading Dashboard</h2>
+                        <p style="margin: 1rem 0;">${message}</p>
+                        <p style="margin-top: 2rem;">
+                            <a href="login.html" class="btn-small">Return to Login</a>
+                        </p>
+                    </div>
+                `;
             }
+        }
 
-            // Display username
-            document.getElementById('username-display').textContent = profile.username || 'User';
-            
-            if (profile) {
-                // Update stats
-                const comparisons = profile.profile.comparisonHistory || [];
-                const tanks = profile.profile.tanks || [];
-                const favorites = profile.profile.favoriteSpecies || [];
+        async function loadDashboard(user) {
+            try {
+                // Load profile
+                const profile = await window.firestoreGetProfile(user.uid);
 
-                document.getElementById('comparison-count').textContent = comparisons.length;
-                document.getElementById('tank-count').textContent = tanks.length;
-                document.getElementById('favorite-count').textContent = favorites.length;
+                if (!profile) {
+                    console.error('Profile not found');
+                    window.location.href = 'login.html';
+                    return;
+                }
 
-                // Load recent comparisons
-                loadRecentComparisons(comparisons.slice(0, 5));
+                // Display username
+                document.getElementById('username-display').textContent = profile.username || 'User';
 
-                // Load tank preview
-                loadTanksPreview(tanks.slice(0, 3));
+                if (profile) {
+                    // Update stats
+                    const comparisons = profile.profile.comparisonHistory || [];
+                    const tanks = profile.profile.tanks || [];
+                    const favorites = profile.profile.favoriteSpecies || [];
 
-                // Load favorites
-                loadFavorites(favorites);
+                    document.getElementById('comparison-count').textContent = comparisons.length;
+                    document.getElementById('tank-count').textContent = tanks.length;
+                    document.getElementById('favorite-count').textContent = favorites.length;
+
+                    // Load recent comparisons
+                    loadRecentComparisons(comparisons.slice(0, 5));
+
+                    // Load tank preview
+                    loadTanksPreview(tanks.slice(0, 3));
+
+                    // Load favorites
+                    loadFavorites(favorites);
+                }
+            } catch (error) {
+                console.error('Error loading dashboard data:', error);
+                showErrorState('Failed to load your data. Please <a href="javascript:location.reload()">refresh the page</a>.');
             }
         }
 
