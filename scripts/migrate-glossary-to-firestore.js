@@ -84,7 +84,7 @@ async function migrateGlossaryData() {
     const totalEntries = Object.values(glossaryData).reduce((sum, entries) => sum + entries.length, 0);
     console.log(`✅ Loaded ${totalEntries} entries across ${Object.keys(glossaryData).length} categories\n`);
 
-    const glossaryCollection = collection(db, 'glossary');
+    const glossaryCollection = db.collection('glossary');
     let successCount = 0;
     let errorCount = 0;
     const errors = [];
