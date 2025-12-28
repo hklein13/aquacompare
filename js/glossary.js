@@ -157,8 +157,7 @@ class GlossaryManager {
                     userId: null,
                     upvotes: 0,
                     verified: true
-                }
-            ,
+                },
 
                 {
                     id: 'columnaris',
@@ -605,8 +604,7 @@ class GlossaryManager {
                     userId: null,
                     upvotes: 0,
                     verified: true
-                }
-            ,
+                },
 
                 {
                     id: 'air-stone-pump',
@@ -701,8 +699,7 @@ class GlossaryManager {
                     userId: null,
                     upvotes: 0,
                     verified: true
-                }
-            ,
+                },
 
                 {
                     id: 'general-hardness',
