@@ -785,6 +785,78 @@ body {
     font-size: 0.85rem;
 }
 
+/* ============================================================================
+   LOADING ANIMATIONS - RISING BUBBLES
+   ============================================================================ */
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    min-height: 200px;
+}
+
+.bubble-loader {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
+}
+
+.bubble {
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    height: 20px;
+    background: rgba(102, 126, 234, 0.6);
+    border-radius: 50%;
+    animation: bubble-rise 3s ease-in infinite;
+}
+
+.bubble:nth-child(1) {
+    left: 10px;
+    animation-delay: 0s;
+}
+
+.bubble:nth-child(2) {
+    left: 40px;
+    animation-delay: 1s;
+    width: 15px;
+    height: 15px;
+}
+
+.bubble:nth-child(3) {
+    left: 70px;
+    animation-delay: 2s;
+    width: 18px;
+    height: 18px;
+}
+
+@keyframes bubble-rise {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-150px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.loading-text {
+    color: #667eea;
+    font-size: 1.1rem;
+    font-weight: 500;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .auth-container {
