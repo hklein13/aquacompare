@@ -29,6 +29,29 @@ body {
     margin-bottom: 1rem;
 }
 
+/* Wave Underline Logo Styling */
+.logo-wave {
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+
+.logo-wave::after {
+    content: '';
+    position: absolute;
+    bottom: -10px;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.8) 25%,
+        rgba(255,255,255,0.8) 75%,
+        transparent 100%
+    );
+    border-radius: 2px;
+}
+
 .header p {
     font-size: 1.4rem;
     opacity: 0.9;
