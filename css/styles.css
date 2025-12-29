@@ -1,6 +1,8 @@
 /* Comparium - Fish Species Compatibility Tool */
 /* Main Stylesheet */
 
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
 * {
     margin: 0;
     padding: 0;
@@ -8,7 +10,7 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     background: #f5f7fa;
     color: #2c3e50;
     line-height: 1.6;
@@ -17,36 +19,94 @@ body {
 .header {
     background: linear-gradient(135deg, #1e3a8a 0%, #14b8a6 100%) !important;
     color: white;
-    padding: 3.5rem 2rem;
-    text-align: center;
+    padding: 10px 30px;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
 .header h1 {
-    font-size: 4rem;
-    margin-bottom: 1rem;
+    font-size: 22px;
+    margin: 0;
+}
+
+/* Wave Underline Logo Styling */
+.logo-wave {
+    font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+
+.logo-wave::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(255,255,255,0.8) 25%,
+        rgba(255,255,255,0.8) 75%,
+        transparent 100%
+    );
+    border-radius: 2px;
 }
 
 .header p {
-    font-size: 1.4rem;
-    opacity: 0.9;
+    font-size: 12px;
+    opacity: 0.8;
+    margin: 0;
 }
 
 .header-nav {
-    margin-top: 1rem;
+    display: flex;
+    gap: 5px;
+    align-items: center;
 }
 
 .header-nav a {
     color: white;
     text-decoration: none;
-    margin: 0 1rem;
-    padding: 0.5rem 1rem;
+    padding: 6px 12px;
     border-radius: 6px;
     transition: background 0.2s ease;
+    font-size: 13px;
+    white-space: nowrap;
 }
 
 .header-nav a:hover {
     background: rgba(255, 255, 255, 0.2);
+}
+
+.header-nav #auth-links {
+    display: flex;
+    gap: 5px;
+}
+
+.welcome-text {
+    color: white;
+    font-size: 13px;
+    opacity: 0.8;
+    white-space: nowrap;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
 }
 
 .container {
@@ -111,17 +171,7 @@ body {
     border-radius: 8px;
     cursor: pointer;
     margin-top: 1rem;
-    transition: transform 0.2s ease;
     box-shadow: 0 4px 12px rgba(20, 184, 166, 0.3);
-}
-
-.compare-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(20, 184, 166, 0.4);
-}
-
-.compare-button:active {
-    transform: translateY(0);
 }
 
 .comparison-grid {
@@ -506,18 +556,8 @@ body {
     font-size: 1.1rem;
     border-radius: 8px;
     cursor: pointer;
-    transition: transform 0.2s ease;
     box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
     font-weight: 600;
-}
-
-.auth-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
-}
-
-.auth-button:active {
-    transform: translateY(0);
 }
 
 .auth-links {
@@ -727,12 +767,6 @@ body {
     margin-bottom: 1rem;
     box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.tank-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.12);
 }
 
 .tank-card h3 {
@@ -758,6 +792,121 @@ body {
     padding: 0.25rem 0.75rem;
     border-radius: 20px;
     font-size: 0.85rem;
+}
+
+/* ============================================================================
+   HOVER ANIMATIONS
+   ============================================================================ */
+
+/* Button Hover - Scale Up */
+.compare-button,
+.auth-button,
+.btn-small,
+button:not(.remove-fish-btn) {
+    transition: all 0.3s ease;
+}
+
+.compare-button:hover,
+.auth-button:hover,
+.btn-small:hover,
+button:not(.remove-fish-btn):hover {
+    transform: scale(1.1);
+}
+
+.compare-button:active,
+.auth-button:active,
+.btn-small:active,
+button:not(.remove-fish-btn):active {
+    transform: scale(1.05);
+}
+
+/* Card Hover - Zoom */
+.tank-card,
+.stat-card,
+.content-section,
+.selection-section,
+.info-card,
+.dashboard-section {
+    transition: all 0.3s ease;
+}
+
+.tank-card:hover,
+.stat-card:hover,
+.info-card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+}
+
+/* ============================================================================
+   LOADING ANIMATIONS - RISING BUBBLES
+   ============================================================================ */
+
+.loading-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 3rem;
+    min-height: 200px;
+}
+
+.bubble-loader {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    margin-bottom: 1rem;
+}
+
+.bubble {
+    position: absolute;
+    bottom: 0;
+    width: 20px;
+    height: 20px;
+    background: rgba(102, 126, 234, 0.6);
+    border-radius: 50%;
+    animation: bubble-rise 3s ease-in infinite;
+}
+
+.bubble:nth-child(1) {
+    left: 10px;
+    animation-delay: 0s;
+}
+
+.bubble:nth-child(2) {
+    left: 40px;
+    animation-delay: 1s;
+    width: 15px;
+    height: 15px;
+}
+
+.bubble:nth-child(3) {
+    left: 70px;
+    animation-delay: 2s;
+    width: 18px;
+    height: 18px;
+}
+
+@keyframes bubble-rise {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-150px) scale(0.5);
+        opacity: 0;
+    }
+}
+
+.loading-text {
+    color: #667eea;
+    font-size: 1.1rem;
+    font-weight: 500;
 }
 
 /* Responsive adjustments */
