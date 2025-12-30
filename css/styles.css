@@ -491,6 +491,7 @@ body {
     /* Fix header for mobile - make text SMALLER not larger */
     .header {
         padding: 10px 15px;
+        position: relative; /* Remove sticky positioning on mobile */
     }
 
     .header-content {
