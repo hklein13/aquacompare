@@ -54,7 +54,10 @@ function makeSpeciesNamesClickable() {
 
         // Find all instances of this fish name in results
         // Escape special regex characters (fixes species with parentheses like "Bichir (Senegal)")
-        const fishNameRegex = new RegExp(`\\b${escapeRegex(fish.commonName)}\\b`, 'g');
+        const escapedName = escapeRegex(fish.commonName);
+        // Only use trailing word boundary if name ends with a word character (fixes parentheses issue)
+        const endsWithWordChar = /\w$/.test(fish.commonName);
+        const fishNameRegex = new RegExp(`\\b${escapedName}${endsWithWordChar ? '\\b' : ''}`, 'g');
 
         const beforeHTML = resultsDiv.innerHTML;
         resultsDiv.innerHTML = resultsDiv.innerHTML.replace(
