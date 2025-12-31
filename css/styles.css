@@ -490,27 +490,27 @@ body {
 
     /* Fix header for mobile - make text SMALLER not larger */
     .header {
-        padding: 10px 15px !important;
-        position: relative !important; /* Remove sticky positioning on mobile */
+        padding: 10px 15px;
+        position: relative; /* Remove sticky positioning on mobile */
     }
 
     .header-content {
-        flex-direction: column !important;
-        align-items: flex-start !important;
-        gap: 10px !important;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
     }
 
     .header-left {
-        width: 100% !important;
-        gap: 8px !important;
+        width: 100%;
+        gap: 8px;
     }
 
     .header h1 {
-        font-size: 18px !important;
+        font-size: 18px;
     }
 
     .header p {
-        font-size: 10px !important;
+        font-size: 10px;
     }
 
     /* Stack navigation vertically on mobile */
