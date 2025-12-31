@@ -95,12 +95,15 @@ async function loadGeneratorFunctions() {
   // Use dynamic import to load the module
   const generator = await import(`file://${generatorPath}`);
 
+  // CommonJS modules are exported as .default when using ES6 import
+  const exported = generator.default || generator;
+
   return {
-    toKebabCase: generator.toKebabCase,
-    generateFishTags: generator.generateFishTags,
-    generateFishDescription: generator.generateFishDescription,
-    generateGlossaryEntry: generator.generateGlossaryEntry,
-    generateGlossaryEntries: generator.generateGlossaryEntries
+    toKebabCase: exported.toKebabCase,
+    generateFishTags: exported.generateFishTags,
+    generateFishDescription: exported.generateFishDescription,
+    generateGlossaryEntry: exported.generateGlossaryEntry,
+    generateGlossaryEntries: exported.generateGlossaryEntries
   };
 }
 
