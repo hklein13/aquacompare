@@ -29,9 +29,11 @@ import admin from 'firebase-admin';
 import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
 import { dirname, join } from 'path';
+import { createRequire } from 'module';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+const require = createRequire(import.meta.url);
 
 // Initialize Firebase Admin SDK
 const serviceAccountPath = join(__dirname, 'serviceAccountKey.json');
@@ -89,22 +91,11 @@ function loadFishDescriptions() {
 }
 
 // Load generator functions
-async function loadGeneratorFunctions() {
+function loadGeneratorFunctions() {
   const generatorPath = join(__dirname, '../js/glossary-generator.js');
 
-  // Use dynamic import to load the module
-  const generator = await import(`file://${generatorPath}`);
-
-  // CommonJS modules are exported as .default when using ES6 import
-  const exported = generator.default || generator;
-
-  return {
-    toKebabCase: exported.toKebabCase,
-    generateFishTags: exported.generateFishTags,
-    generateFishDescription: exported.generateFishDescription,
-    generateGlossaryEntry: exported.generateGlossaryEntry,
-    generateGlossaryEntries: exported.generateGlossaryEntries
-  };
+  // Use require to load CommonJS module (via createRequire)
+  return require(generatorPath);
 }
 
 // Load diseases, equipment, and terminology from glossary.js
@@ -140,7 +131,7 @@ async function migrateGlossaryData() {
     console.log(`✅ Loaded ${Object.keys(fishDescriptions).length} curated descriptions\n`);
 
     console.log('📖 Loading glossary generator...');
-    const generator = await loadGeneratorFunctions();
+    const generator = loadGeneratorFunctions();
     console.log('✅ Generator functions loaded\n');
 
     console.log('📖 Loading other glossary data (diseases, equipment, terminology)...');
