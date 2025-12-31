@@ -89,22 +89,18 @@ function loadFishDescriptions() {
 }
 
 // Load generator functions
-function loadGeneratorFunctions() {
+async function loadGeneratorFunctions() {
   const generatorPath = join(__dirname, '../js/glossary-generator.js');
-  const content = readFileSync(generatorPath, 'utf-8');
 
-  // Extract the key functions we need
-  const functionsCode = content.replace(/if \(typeof module.*$/s, '');
-
-  // Evaluate the functions into scope
-  eval(functionsCode);
+  // Use dynamic import to load the module
+  const generator = await import(`file://${generatorPath}`);
 
   return {
-    toKebabCase,
-    generateFishTags,
-    generateFishDescription,
-    generateGlossaryEntry,
-    generateGlossaryEntries
+    toKebabCase: generator.toKebabCase,
+    generateFishTags: generator.generateFishTags,
+    generateFishDescription: generator.generateFishDescription,
+    generateGlossaryEntry: generator.generateGlossaryEntry,
+    generateGlossaryEntries: generator.generateGlossaryEntries
   };
 }
 
@@ -141,7 +137,7 @@ async function migrateGlossaryData() {
     console.log(`✅ Loaded ${Object.keys(fishDescriptions).length} curated descriptions\n`);
 
     console.log('📖 Loading glossary generator...');
-    const generator = loadGeneratorFunctions();
+    const generator = await loadGeneratorFunctions();
     console.log('✅ Generator functions loaded\n');
 
     console.log('📖 Loading other glossary data (diseases, equipment, terminology)...');
