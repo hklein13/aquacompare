@@ -222,14 +222,7 @@ option {
         padding: 0.75rem 1.5rem;
     }
 
-    /* Better mobile header */
-    .header h1 {
-        font-size: 2rem;
-    }
-
-    .header p {
-        font-size: 1rem;
-    }
+    /* Mobile header styles moved to styles.css to prevent conflicts */
 
     .header-nav {
         gap: 1rem;
