@@ -234,6 +234,23 @@ git push                       # Push to remote
 
 ---
 
+## Deployment Workflow
+
+### How Code Gets to Production
+1. **Claude Code creates staging branch** (e.g., `claude/fix-species-links-Hv5Zn`)
+2. **User reviews changes** in staging branch
+3. **User merges staging branch to main** via GitHub
+4. **Live site updates automatically** when main branch changes
+
+**CRITICAL:** Merging to main = live site deployment. This is why code quality and testing are essential.
+
+### Current Testing Limitations
+- **No local testing environment setup yet**
+- Many changes tested by viewing on live site (risky!)
+- Need simple, repeatable local testing process
+
+---
+
 ## Known Issues & Preferences
 
 ### User Environment
@@ -244,8 +261,9 @@ git push                       # Push to remote
 - **Beginner to coding** - Needs step-by-step instructions with explanations
 
 ### Technical Preferences
+- **Code quality is critical** - Changes go straight to production when merged to main
 - **Always verify changes don't break existing functionality**
-- Test locally before deploying
+- Test locally before deploying (need to set up local testing environment)
 - When in doubt, ask before making major changes
 - Explain trade-offs clearly (performance vs simplicity, etc.)
 
