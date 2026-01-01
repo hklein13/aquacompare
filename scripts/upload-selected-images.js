@@ -43,30 +43,42 @@ if (!existsSync(TEMP_DIR)) {
     mkdirSync(TEMP_DIR, { recursive: true });
 }
 
-// Download image with proper headers and validation
-async function downloadImage(url, filename) {
-    const response = await fetch(url, {
-        headers: {
-            'User-Agent': 'Comparium/1.0 (https://comparium.net; contact@comparium.net) Node.js'
+// Download image with proper headers, validation, and retry logic
+async function downloadImage(url, filename, retries = 3) {
+    for (let attempt = 1; attempt <= retries; attempt++) {
+        try {
+            const response = await fetch(url, {
+                headers: {
+                    'User-Agent': 'Comparium/1.0 (https://comparium.net; contact@comparium.net) Node.js'
+                }
+            });
+
+            // Check if response is actually an image
+            const contentType = response.headers.get('content-type');
+            if (!contentType || !contentType.startsWith('image/')) {
+                throw new Error(`Invalid response: expected image, got ${contentType}`);
+            }
+
+            const buffer = Buffer.from(await response.arrayBuffer());
+
+            // Validate it's not an error page (images don't start with <!DOCTYPE)
+            if (buffer.toString('utf8', 0, 50).includes('<!DOCTYPE')) {
+                throw new Error('Received HTML error page instead of image');
+            }
+
+            const filepath = join(TEMP_DIR, filename);
+            writeFileSync(filepath, buffer);
+            return filepath;
+        } catch (error) {
+            if (attempt < retries) {
+                // Wait longer between retries (1s, 2s, 3s)
+                const delay = attempt * 1000;
+                await new Promise(resolve => setTimeout(resolve, delay));
+            } else {
+                throw error; // Final attempt failed
+            }
         }
-    });
-
-    // Check if response is actually an image
-    const contentType = response.headers.get('content-type');
-    if (!contentType || !contentType.startsWith('image/')) {
-        throw new Error(`Invalid response: expected image, got ${contentType}`);
     }
-
-    const buffer = Buffer.from(await response.arrayBuffer());
-
-    // Validate it's not an error page (images don't start with <!DOCTYPE)
-    if (buffer.toString('utf8', 0, 50).includes('<!DOCTYPE')) {
-        throw new Error('Received HTML error page instead of image');
-    }
-
-    const filepath = join(TEMP_DIR, filename);
-    writeFileSync(filepath, buffer);
-    return filepath;
 }
 
 // Upload image to Firebase Storage
@@ -163,9 +175,9 @@ async function main() {
         process.stdout.write(`[${i + 1}/${selectedSpecies.length}] ${species.key}... `);
 
         try {
-            // Add delay between requests to be polite to Wikimedia API
+            // Add delay between requests to avoid Wikimedia rate limiting
             if (i > 0) {
-                await new Promise(resolve => setTimeout(resolve, 300));
+                await new Promise(resolve => setTimeout(resolve, 500));
             }
 
             // Download image
