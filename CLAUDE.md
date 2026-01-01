@@ -204,8 +204,8 @@ npm run migrate:glossary       # Migrate glossary data to Firestore
 
 ### Development
 ```bash
-# Open project folder
-cd C:\Comparium
+# Open project folder (user's local folder is "comparium-live")
+cd C:\Users\HarrisonKlein\Downloads\comparium-live
 
 # Check service account key exists
 dir scripts\serviceAccountKey.json
@@ -237,6 +237,8 @@ git push                       # Push to remote
 ## Known Issues & Preferences
 
 ### User Environment
+- **Website:** comparium.net (live site domain)
+- **Local folder:** `comparium-live` (contains latest code + serviceAccountKey.json)
 - **Windows PC** - Path handling and command syntax differs from Mac/Linux
 - **Working from downloaded ZIPs** - Not using git clone (manual updates required)
 - **Beginner to coding** - Needs step-by-step instructions with explanations
@@ -320,8 +322,8 @@ const entries = typeof generateGlossaryEntries === 'function'
 1. Go to: https://github.com/hklein13/comparium/tree/claude/fix-species-links-Hv5Zn
 2. Click the green **"Code"** button
 3. Click **"Download ZIP"**
-4. Extract ZIP to a simple folder path (e.g., `C:\Comparium\`)
-5. Copy your `serviceAccountKey.json` to: `C:\Comparium\scripts\serviceAccountKey.json`
+4. Extract to your working folder: `comparium-live`
+5. Copy your `serviceAccountKey.json` to: `comparium-live\scripts\serviceAccountKey.json`
 
 ### Task: Run Firestore Migration
 
@@ -332,7 +334,7 @@ const entries = typeof generateGlossaryEntries === 'function'
 
 **Steps:**
 1. Open Command Prompt (Windows key + R → type `cmd` → Enter)
-2. Navigate to project: `cd C:\Comparium`
+2. Navigate to project: `cd C:\Users\HarrisonKlein\Downloads\comparium-live`
 3. Install dependencies: `npm install`
 4. Run migration: `npm run migrate:glossary`
 5. Verify success: Check Firebase Console → Firestore Database → glossary collection
@@ -348,7 +350,7 @@ const entries = typeof generateGlossaryEntries === 'function'
 ### Task: Check if Service Account Key is in the Right Place
 
 1. Open Command Prompt
-2. Navigate to project: `cd C:\Comparium`
+2. Navigate to project: `cd C:\Users\HarrisonKlein\Downloads\comparium-live`
 3. Run: `dir scripts\serviceAccountKey.json`
 4. Should show file details (not "File Not Found")
 
