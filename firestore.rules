@@ -239,6 +239,79 @@ service cloud.firestore {
     }
 
     // ========================================================================
+    // TANK EVENTS COLLECTION (Phase 1 - Maintenance Tracking)
+    // ========================================================================
+    // Structure: tankEvents/{eventId}
+    //   - userId: Owner's Firebase Auth UID
+    //   - tankId: Reference to tank
+    //   - type: Event type (waterChange, fishAdded, etc.)
+    //   - date: When event occurred
+    //   - created: When record was created
+    //   - notes: Optional notes
+    //   - data: Type-specific data object
+    // ========================================================================
+
+    match /tankEvents/{eventId} {
+      // READ: Only owner can read their own events
+      allow read: if isAuthenticated()
+                     && resource.data.userId == request.auth.uid;
+
+      // CREATE: Must be authenticated and set userId to own UID
+      allow create: if isAuthenticated()
+                       && request.resource.data.userId == request.auth.uid
+                       && request.resource.data.tankId is string
+                       && request.resource.data.type is string;
+
+      // UPDATE: Only owner can update their own events
+      allow update: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid
+                       && request.resource.data.userId == request.auth.uid;
+
+      // DELETE: Only owner can delete their own events
+      allow delete: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================================================
+    // TANK SCHEDULES COLLECTION (Phase 1 - Recurring Maintenance)
+    // ========================================================================
+    // Structure: tankSchedules/{scheduleId}
+    //   - userId: Owner's Firebase Auth UID
+    //   - tankId: Reference to tank
+    //   - tankName: Denormalized tank name
+    //   - type: Schedule type (waterChange, filterMaintenance, etc.)
+    //   - intervalDays: Days between occurrences
+    //   - enabled: Whether schedule is active
+    //   - lastCompleted: When task was last done
+    //   - nextDue: When task is next due
+    //   - reminder: Reminder settings object
+    //   - notes: Optional notes
+    // ========================================================================
+
+    match /tankSchedules/{scheduleId} {
+      // READ: Only owner can read their own schedules
+      allow read: if isAuthenticated()
+                     && resource.data.userId == request.auth.uid;
+
+      // CREATE: Must be authenticated and set userId to own UID
+      allow create: if isAuthenticated()
+                       && request.resource.data.userId == request.auth.uid
+                       && request.resource.data.tankId is string
+                       && request.resource.data.type is string
+                       && request.resource.data.intervalDays is number
+                       && request.resource.data.intervalDays > 0;
+
+      // UPDATE: Only owner can update their own schedules
+      allow update: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid
+                       && request.resource.data.userId == request.auth.uid;
+
+      // DELETE: Only owner can delete their own schedules
+      allow delete: if isAuthenticated()
+                       && resource.data.userId == request.auth.uid;
+    }
+
+    // ========================================================================
     // DEFAULT: DENY ALL ACCESS
     // ========================================================================
     // Any collection not explicitly defined above is denied by default

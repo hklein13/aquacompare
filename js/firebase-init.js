@@ -58,7 +58,7 @@ window.firebaseAuthState = onAuthStateChanged;
 window.getFirebaseUid = () => auth.currentUser ? auth.currentUser.uid : null;
 
 // Firestore helper wrappers
-import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs, query, where, deleteDoc } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+import { doc, getDoc, setDoc, updateDoc, arrayUnion, arrayRemove, collection, getDocs, query, where, deleteDoc, addDoc, orderBy, Timestamp, limit } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
 window.firestoreGetProfile = async (uid) => {
   if (!firestore) return null;
@@ -236,6 +236,315 @@ window.firestoreImportUserData = async (uid, importData) => {
     return { success: true };
   } catch (e) {
     console.error('firestoreImportUserData error:', e);
+    return { success: false };
+  }
+};
+
+// ============================================================================
+// TANK EVENTS (Phase 1 - Maintenance Tracking)
+// ============================================================================
+
+/**
+ * Add a new tank event
+ * @param {string} uid - User's UID
+ * @param {object} eventData - Event data (tankId, type, date, notes, data)
+ * @returns {Promise<{success: boolean, eventId?: string}>}
+ */
+window.firestoreAddTankEvent = async (uid, eventData) => {
+  if (!firestore || !uid) return { success: false };
+  try {
+    const event = {
+      userId: uid,
+      tankId: eventData.tankId,
+      type: eventData.type,
+      date: eventData.date ? Timestamp.fromDate(new Date(eventData.date)) : Timestamp.now(),
+      created: Timestamp.now(),
+      notes: eventData.notes || '',
+      data: eventData.data || {}
+    };
+    const ref = await addDoc(collection(firestore, 'tankEvents'), event);
+    return { success: true, eventId: ref.id };
+  } catch (e) {
+    console.error('firestoreAddTankEvent error:', e);
+    return { success: false };
+  }
+};
+
+/**
+ * Get tank events for a specific tank
+ * @param {string} uid - User's UID
+ * @param {string} tankId - Tank ID
+ * @param {number} maxResults - Maximum number of results (default 50)
+ * @returns {Promise<array>} - Array of events sorted by date descending
+ */
+window.firestoreGetTankEvents = async (uid, tankId, maxResults = 50) => {
+  if (!firestore || !uid) return [];
+  try {
+    const q = query(
+      collection(firestore, 'tankEvents'),
+      where('userId', '==', uid),
+      where('tankId', '==', tankId),
+      orderBy('date', 'desc'),
+      limit(maxResults)
+    );
+    const snaps = await getDocs(q);
+    return snaps.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      // Convert Timestamps to ISO strings for easier handling
+      date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
+      created: d.data().created?.toDate?.()?.toISOString() || d.data().created
+    }));
+  } catch (e) {
+    console.error('firestoreGetTankEvents error:', e);
+    return [];
+  }
+};
+
+/**
+ * Get all tank events for a user (across all tanks)
+ * @param {string} uid - User's UID
+ * @param {number} maxResults - Maximum number of results (default 100)
+ * @returns {Promise<array>} - Array of events sorted by date descending
+ */
+window.firestoreGetAllUserEvents = async (uid, maxResults = 100) => {
+  if (!firestore || !uid) return [];
+  try {
+    const q = query(
+      collection(firestore, 'tankEvents'),
+      where('userId', '==', uid),
+      orderBy('date', 'desc'),
+      limit(maxResults)
+    );
+    const snaps = await getDocs(q);
+    return snaps.docs.map(d => ({
+      id: d.id,
+      ...d.data(),
+      date: d.data().date?.toDate?.()?.toISOString() || d.data().date,
+      created: d.data().created?.toDate?.()?.toISOString() || d.data().created
+    }));
+  } catch (e) {
+    console.error('firestoreGetAllUserEvents error:', e);
+    return [];
+  }
+};
+
+/**
+ * Delete a tank event
+ * @param {string} uid - User's UID (for verification)
+ * @param {string} eventId - Event document ID
+ * @returns {Promise<{success: boolean}>}
+ */
+window.firestoreDeleteTankEvent = async (uid, eventId) => {
+  if (!firestore || !uid || !eventId) return { success: false };
+  try {
+    // First verify the event belongs to this user
+    const eventRef = doc(firestore, 'tankEvents', eventId);
+    const eventSnap = await getDoc(eventRef);
+    if (!eventSnap.exists() || eventSnap.data().userId !== uid) {
+      return { success: false };
+    }
+    await deleteDoc(eventRef);
+    return { success: true };
+  } catch (e) {
+    console.error('firestoreDeleteTankEvent error:', e);
+    return { success: false };
+  }
+};
+
+// ============================================================================
+// TANK SCHEDULES (Phase 1 - Recurring Maintenance)
+// ============================================================================
+
+/**
+ * Add or update a tank schedule
+ * @param {string} uid - User's UID
+ * @param {object} scheduleData - Schedule data
+ * @returns {Promise<{success: boolean, scheduleId?: string}>}
+ */
+window.firestoreSaveTankSchedule = async (uid, scheduleData) => {
+  if (!firestore || !uid) return { success: false };
+  try {
+    const schedule = {
+      userId: uid,
+      tankId: scheduleData.tankId,
+      tankName: scheduleData.tankName || '',
+      type: scheduleData.type,
+      customLabel: scheduleData.customLabel || '',
+      intervalDays: scheduleData.intervalDays || 7,
+      enabled: scheduleData.enabled !== false, // default true
+      created: scheduleData.created ? Timestamp.fromDate(new Date(scheduleData.created)) : Timestamp.now(),
+      lastCompleted: scheduleData.lastCompleted ? Timestamp.fromDate(new Date(scheduleData.lastCompleted)) : null,
+      nextDue: null, // Will be set below
+      reminder: {
+        enabled: scheduleData.reminder?.enabled !== false,
+        daysBefore: scheduleData.reminder?.daysBefore || 1,
+        lastSent: scheduleData.reminder?.lastSent ? Timestamp.fromDate(new Date(scheduleData.reminder.lastSent)) : null
+      },
+      notes: scheduleData.notes || ''
+    };
+
+    // Set nextDue: use provided value, or default to intervalDays from now
+    if (scheduleData.nextDue) {
+      schedule.nextDue = Timestamp.fromDate(new Date(scheduleData.nextDue));
+    } else {
+      const defaultDate = new Date();
+      defaultDate.setDate(defaultDate.getDate() + schedule.intervalDays);
+      schedule.nextDue = Timestamp.fromDate(defaultDate);
+    }
+
+    // Update existing or create new
+    if (scheduleData.id) {
+      const ref = doc(firestore, 'tankSchedules', scheduleData.id);
+      await setDoc(ref, schedule, { merge: true });
+      return { success: true, scheduleId: scheduleData.id };
+    } else {
+      const ref = await addDoc(collection(firestore, 'tankSchedules'), schedule);
+      return { success: true, scheduleId: ref.id };
+    }
+  } catch (e) {
+    console.error('firestoreSaveTankSchedule error:', e);
+    return { success: false };
+  }
+};
+
+/**
+ * Get schedules for a specific tank
+ * @param {string} uid - User's UID
+ * @param {string} tankId - Tank ID
+ * @returns {Promise<array>}
+ */
+window.firestoreGetTankSchedules = async (uid, tankId) => {
+  if (!firestore || !uid) return [];
+  try {
+    const q = query(
+      collection(firestore, 'tankSchedules'),
+      where('userId', '==', uid),
+      where('tankId', '==', tankId)
+    );
+    const snaps = await getDocs(q);
+    return snaps.docs.map(d => {
+      const data = d.data();
+      return {
+        id: d.id,
+        ...data,
+        created: data.created?.toDate?.()?.toISOString() || data.created,
+        lastCompleted: data.lastCompleted?.toDate?.()?.toISOString() || null,
+        nextDue: data.nextDue?.toDate?.()?.toISOString() || null,
+        reminder: {
+          ...data.reminder,
+          lastSent: data.reminder?.lastSent?.toDate?.()?.toISOString() || null
+        }
+      };
+    });
+  } catch (e) {
+    console.error('firestoreGetTankSchedules error:', e);
+    return [];
+  }
+};
+
+/**
+ * Get all schedules for a user, optionally filtered by enabled status
+ * @param {string} uid - User's UID
+ * @param {boolean} enabledOnly - If true, only return enabled schedules
+ * @returns {Promise<array>}
+ */
+window.firestoreGetAllUserSchedules = async (uid, enabledOnly = false) => {
+  if (!firestore || !uid) return [];
+  try {
+    let q;
+    if (enabledOnly) {
+      q = query(
+        collection(firestore, 'tankSchedules'),
+        where('userId', '==', uid),
+        where('enabled', '==', true),
+        orderBy('nextDue', 'asc')
+      );
+    } else {
+      q = query(
+        collection(firestore, 'tankSchedules'),
+        where('userId', '==', uid),
+        orderBy('nextDue', 'asc')
+      );
+    }
+    const snaps = await getDocs(q);
+    return snaps.docs.map(d => {
+      const data = d.data();
+      return {
+        id: d.id,
+        ...data,
+        created: data.created?.toDate?.()?.toISOString() || data.created,
+        lastCompleted: data.lastCompleted?.toDate?.()?.toISOString() || null,
+        nextDue: data.nextDue?.toDate?.()?.toISOString() || null,
+        reminder: {
+          ...data.reminder,
+          lastSent: data.reminder?.lastSent?.toDate?.()?.toISOString() || null
+        }
+      };
+    });
+  } catch (e) {
+    console.error('firestoreGetAllUserSchedules error:', e);
+    return [];
+  }
+};
+
+/**
+ * Mark a schedule as completed (updates lastCompleted and nextDue)
+ * @param {string} uid - User's UID
+ * @param {string} scheduleId - Schedule ID
+ * @param {Date} completedDate - When the task was completed (default: now)
+ * @returns {Promise<{success: boolean}>}
+ */
+window.firestoreCompleteSchedule = async (uid, scheduleId, completedDate = new Date()) => {
+  if (!firestore || !uid || !scheduleId) return { success: false };
+  try {
+    const scheduleRef = doc(firestore, 'tankSchedules', scheduleId);
+    const scheduleSnap = await getDoc(scheduleRef);
+
+    if (!scheduleSnap.exists() || scheduleSnap.data().userId !== uid) {
+      return { success: false };
+    }
+
+    const scheduleData = scheduleSnap.data();
+    const completedTimestamp = Timestamp.fromDate(completedDate);
+
+    // Calculate new nextDue
+    const nextDate = new Date(completedDate);
+    nextDate.setDate(nextDate.getDate() + scheduleData.intervalDays);
+
+    await updateDoc(scheduleRef, {
+      lastCompleted: completedTimestamp,
+      nextDue: Timestamp.fromDate(nextDate),
+      'reminder.lastSent': null // Reset reminder so it can fire again
+    });
+
+    return { success: true };
+  } catch (e) {
+    console.error('firestoreCompleteSchedule error:', e);
+    return { success: false };
+  }
+};
+
+/**
+ * Delete a schedule
+ * @param {string} uid - User's UID
+ * @param {string} scheduleId - Schedule ID
+ * @returns {Promise<{success: boolean}>}
+ */
+window.firestoreDeleteTankSchedule = async (uid, scheduleId) => {
+  if (!firestore || !uid || !scheduleId) return { success: false };
+  try {
+    const scheduleRef = doc(firestore, 'tankSchedules', scheduleId);
+    const scheduleSnap = await getDoc(scheduleRef);
+
+    if (!scheduleSnap.exists() || scheduleSnap.data().userId !== uid) {
+      return { success: false };
+    }
+
+    await deleteDoc(scheduleRef);
+    return { success: true };
+  } catch (e) {
+    console.error('firestoreDeleteTankSchedule error:', e);
     return { success: false };
   }
 };

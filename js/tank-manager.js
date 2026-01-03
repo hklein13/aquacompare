@@ -78,7 +78,34 @@ window.tankManager = {
             const opt = document.createElement('option');
             opt.value = key;
             opt.textContent = fish.commonName;
+            opt.dataset.searchable = fish.commonName.toLowerCase() + ' ' + (fish.scientificName || '').toLowerCase();
             selector.appendChild(opt);
+        });
+    },
+
+    /**
+     * Filter species selector based on search input
+     */
+    filterSpeciesSelector(searchTerm) {
+        const selector = document.getElementById('species-selector');
+        if (!selector) return;
+
+        const term = (searchTerm || '').toLowerCase().trim();
+        const options = selector.querySelectorAll('option');
+
+        options.forEach(opt => {
+            if (!opt.value) {
+                // Always show the default option
+                opt.style.display = '';
+                return;
+            }
+
+            const searchable = opt.dataset.searchable || opt.textContent.toLowerCase();
+            if (!term || searchable.includes(term)) {
+                opt.style.display = '';
+            } else {
+                opt.style.display = 'none';
+            }
         });
     },
 
@@ -96,6 +123,13 @@ window.tankManager = {
         this.currentTankSpecies = [];
         this.editingTankId = null;
         this.updateSpeciesList();
+
+        // Reset species search filter
+        const searchInput = document.getElementById('species-search');
+        if (searchInput) {
+            searchInput.value = '';
+            this.filterSpeciesSelector('');
+        }
 
         // Scroll to tank section
         const tankSection = document.getElementById('my-tanks-section');
@@ -351,6 +385,11 @@ window.tankManager = {
         card.appendChild(actions);
 
         container.appendChild(card);
+
+        // Add maintenance section (Phase 1)
+        if (window.maintenanceManager) {
+            window.maintenanceManager.renderTankMaintenance(card, tank);
+        }
     },
 
     /**
@@ -443,4 +482,9 @@ function addSpeciesToTank() {
 
 function saveTank(event) {
     window.tankManager.saveTank(event);
+}
+
+function filterSpeciesSelector() {
+    const searchInput = document.getElementById('species-search');
+    window.tankManager.filterSpeciesSelector(searchInput ? searchInput.value : '');
 }
