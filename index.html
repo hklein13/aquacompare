@@ -511,8 +511,10 @@
         document.getElementById('copyright-year').textContent = new Date().getFullYear();
     </script>
 
-    <script src="js/theme-manager.js"></script>
-    <script src="js/auth-manager.js"></script>
+    <!-- Scripts: Firebase first, then storage, then auth, then theme -->
     <script type="module" src="js/firebase-init.js"></script>
+    <script src="js/storage-service.js"></script>
+    <script src="js/auth-manager.js"></script>
+    <script src="js/theme-manager.js"></script>
 </body>
 </html>
