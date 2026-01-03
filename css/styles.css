@@ -41,6 +41,19 @@ body {
     gap: 15px;
 }
 
+.home-link {
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 15px;
+}
+
+.home-link:hover {
+    opacity: 0.9;
+}
+
 .header h1 {
     font-size: 22px;
     margin: 0;
@@ -1010,6 +1023,577 @@ button:not(.remove-fish-btn):active {
 
     .dashboard-stats {
         grid-template-columns: 1fr;
+    }
+}
+
+/* ============================================================================
+   PHASE 1: Tank Maintenance Tracking Styles
+   ============================================================================ */
+
+/* Upcoming Maintenance Banner */
+.maintenance-banner {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border: 1px solid #f59e0b;
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.maintenance-banner.all-clear {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-color: #10b981;
+}
+
+.maintenance-banner h3 {
+    margin: 0 0 0.5rem 0;
+    font-size: 1rem;
+    color: #92400e;
+}
+
+.maintenance-banner.all-clear h3 {
+    color: #065f46;
+}
+
+.maintenance-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.maintenance-list li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+}
+
+.maintenance-list li:last-child {
+    border-bottom: none;
+}
+
+.maintenance-task {
+    font-weight: 500;
+    color: #1f2937;
+}
+
+.maintenance-due {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+.maintenance-due.overdue {
+    color: #dc2626;
+    font-weight: 600;
+}
+
+.maintenance-due.due-soon {
+    color: #f59e0b;
+    font-weight: 500;
+}
+
+/* Tank Card Maintenance Section */
+.tank-maintenance {
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.tank-maintenance-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+}
+
+.tank-maintenance-header h4 {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Quick Log Buttons */
+.quick-log-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 0.75rem;
+}
+
+.quick-log-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.35rem 0.75rem;
+    font-size: 0.8rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text-primary);
+}
+
+.quick-log-btn:hover {
+    background: var(--gradient-start);
+    color: white;
+    border-color: var(--gradient-start);
+}
+
+.quick-log-btn.logged {
+    background: #d1fae5;
+    border-color: #10b981;
+    color: #065f46;
+}
+
+/* Recent Events List */
+.recent-events {
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.85rem;
+}
+
+.event-item:last-child {
+    border-bottom: none;
+}
+
+.event-info {
+    flex: 1;
+}
+
+.event-type {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.event-date {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.event-notes {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    margin-top: 0.25rem;
+}
+
+.event-delete {
+    background: none;
+    border: none;
+    color: #9ca3af;
+    cursor: pointer;
+    padding: 0.25rem;
+    font-size: 0.9rem;
+}
+
+.event-delete:hover {
+    color: #dc2626;
+}
+
+/* Schedule Pills */
+.schedule-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+}
+
+.schedule-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    background: #eff6ff;
+    border: 1px solid #3b82f6;
+    border-radius: 12px;
+    color: #1d4ed8;
+}
+
+.schedule-pill.overdue {
+    background: #fef2f2;
+    border-color: #dc2626;
+    color: #dc2626;
+}
+
+.schedule-pill.due-today {
+    background: #fef3c7;
+    border-color: #f59e0b;
+    color: #b45309;
+}
+
+/* Event Modal */
+.event-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 1rem;
+}
+
+.event-modal {
+    background: var(--bg-primary);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 500px;
+    max-height: 90vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+}
+
+.event-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.event-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.event-modal-close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    padding: 0;
+    line-height: 1;
+}
+
+.event-modal-close:hover {
+    color: var(--text-primary);
+}
+
+.event-modal-body {
+    padding: 1.5rem;
+}
+
+.event-modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    padding: 1rem 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+/* Form Styles for Modal */
+.event-form .form-group {
+    margin-bottom: 1rem;
+}
+
+.event-form label {
+    display: block;
+    margin-bottom: 0.35rem;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.event-form input,
+.event-form select,
+.event-form textarea {
+    width: 100%;
+    padding: 0.6rem 0.75rem;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+}
+
+.event-form input:focus,
+.event-form select:focus,
+.event-form textarea:focus {
+    outline: none;
+    border-color: var(--gradient-start);
+    box-shadow: 0 0 0 3px rgba(20, 184, 166, 0.1);
+}
+
+/* Event Type Grid */
+.event-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+.event-type-option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.event-type-option:hover {
+    border-color: var(--gradient-start);
+}
+
+.event-type-option.selected {
+    border-color: var(--gradient-start);
+    background: rgba(20, 184, 166, 0.1);
+}
+
+.event-type-option input {
+    display: none;
+}
+
+.event-type-icon {
+    font-size: 1.2rem;
+}
+
+.event-type-label {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* Empty State for Events */
+.events-empty {
+    text-align: center;
+    padding: 1rem;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+/* View All Link */
+.view-all-link {
+    display: block;
+    text-align: center;
+    margin-top: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--gradient-start);
+    text-decoration: none;
+}
+
+.view-all-link:hover {
+    text-decoration: underline;
+}
+
+/* Responsive for Maintenance UI */
+@media (max-width: 768px) {
+    .quick-log-buttons {
+        gap: 0.35rem;
+    }
+
+    .quick-log-btn {
+        padding: 0.3rem 0.6rem;
+        font-size: 0.75rem;
+    }
+
+    .event-type-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* ==========================================
+   SCHEDULE MANAGEMENT STYLES
+   ========================================== */
+
+/* Tank Schedules Section */
+.tank-schedules {
+    margin-bottom: 1rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.schedules-header {
+    margin-bottom: 0.5rem;
+}
+
+.schedules-header h5 {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
+    font-weight: 600;
+}
+
+/* Schedule Pills Container */
+.schedule-pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+/* Individual Schedule Pill */
+.schedule-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.6rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.schedule-pill:hover {
+    border-color: var(--gradient-start);
+    background: rgba(20, 184, 166, 0.05);
+}
+
+.schedule-pill.disabled {
+    opacity: 0.5;
+}
+
+.schedule-pill .schedule-icon {
+    font-size: 0.9rem;
+}
+
+.schedule-pill .schedule-label {
+    font-weight: 500;
+    color: var(--text-primary);
+}
+
+.schedule-pill .schedule-due {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    margin-left: 0.25rem;
+}
+
+/* Due Status Colors */
+.schedule-pill.overdue {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+}
+
+.schedule-pill.overdue .schedule-due {
+    color: #dc3545;
+    font-weight: 600;
+}
+
+.schedule-pill.due-today {
+    background: rgba(255, 193, 7, 0.1);
+    border-color: #ffc107;
+}
+
+.schedule-pill.due-today .schedule-due {
+    color: #d4a106;
+    font-weight: 600;
+}
+
+.schedule-pill.due-soon {
+    background: rgba(255, 193, 7, 0.05);
+    border-color: #ffc107;
+}
+
+.schedule-pill.due-soon .schedule-due {
+    color: #d4a106;
+}
+
+/* Complete Button on Pill */
+.schedule-complete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    margin-left: 0.25rem;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: var(--gradient-start);
+    color: white;
+    font-size: 0.7rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.schedule-complete-btn:hover {
+    background: var(--gradient-end);
+    transform: scale(1.1);
+}
+
+/* Add Schedule Button */
+.add-schedule-btn {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.4rem 0.6rem;
+    background: transparent;
+    border: 1px dashed var(--border-color);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.add-schedule-btn:hover {
+    border-color: var(--gradient-start);
+    color: var(--gradient-start);
+}
+
+/* Empty Schedules State */
+.schedules-empty {
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    padding: 0.25rem 0;
+}
+
+.schedules-empty a {
+    color: var(--gradient-start);
+    text-decoration: none;
+}
+
+.schedules-empty a:hover {
+    text-decoration: underline;
+}
+
+/* Schedule Type Grid (same as event type but maybe smaller) */
+.schedule-type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Responsive for Schedules */
+@media (max-width: 768px) {
+    .schedule-pills {
+        gap: 0.35rem;
+    }
+
+    .schedule-pill {
+        padding: 0.3rem 0.5rem;
+        font-size: 0.75rem;
+    }
+
+    .schedule-pill .schedule-icon {
+        font-size: 0.8rem;
+    }
+
+    .schedule-complete-btn {
+        width: 18px;
+        height: 18px;
+        font-size: 0.65rem;
+    }
+
+    .schedule-type-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 

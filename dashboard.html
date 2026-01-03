@@ -22,8 +22,10 @@
     <div class="header">
         <div class="header-content">
             <div class="header-left">
-                <h1><span class="logo-wave">Comparium</span></h1>
-                <p>The place for all things aquarium</p>
+                <a href="index.html" class="home-link">
+                    <h1><span class="logo-wave">Comparium</span></h1>
+                    <p>The place for all things aquarium</p>
+                </a>
             </div>
             <div class="header-nav">
                 <a href="index.html">Compare Fish</a>
@@ -97,9 +99,11 @@
 
                     <div class="form-group">
                         <label>Select Fish Species</label>
-                        <select id="species-selector" onchange="addSpeciesToTank()">
+                        <input type="text" id="species-search" placeholder="Search species..." oninput="filterSpeciesSelector()" style="margin-bottom: 0.5rem;">
+                        <select id="species-selector" onchange="addSpeciesToTank()" size="6" style="width: 100%;">
                             <option value="">-- Choose a species to add --</option>
                         </select>
+                        <small style="color: var(--text-secondary); display: block; margin-top: 0.25rem;">Type to filter, click to add</small>
                     </div>
 
                     <div id="selected-species-list" style="margin: 1rem 0;">
@@ -155,6 +159,7 @@
     <script src="js/storage-service.js"></script>
     <script src="js/auth-manager.js"></script>
     <script src="js/tank-manager.js"></script>
+    <script src="js/maintenance-manager.js"></script>
     <script>
         // PRODUCTION: Proper auth check using Firebase's event system
         (async () => {

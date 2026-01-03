@@ -10,20 +10,38 @@ The test suite validates the **entire user journey** from account creation to da
 1. ✅ **Registration** - Create new user account with unique credentials
 2. ✅ **Authentication** - Verify login redirects to dashboard
 3. ✅ **Tank Management** - Create a tank with species
-4. ✅ **Favorites** - Add species to favorites
-5. ✅ **Comparisons** - Save fish compatibility comparisons
-6. ✅ **Logout** - Sign out of account
-7. ✅ **Re-authentication** - Log back in
-8. ✅ **Data Persistence** - Verify all data survived logout/login cycle
+4. ✅ **Quick Event Logging** - Log water change with one click
+5. ✅ **Detailed Event Logging** - Log parameter test with values
+6. ✅ **Schedule Creation** - Create recurring maintenance schedules
+7. ✅ **Schedule Completion** - Mark tasks complete, auto-log events
+8. ✅ **Custom Schedules** - Create custom task schedules
+9. ✅ **Favorites** - Add species to favorites
+10. ✅ **Comparisons** - Save fish compatibility comparisons
+11. ✅ **Logout** - Sign out of account
+12. ✅ **Re-authentication** - Log back in
+13. ✅ **Data Persistence** - Verify tanks, events, schedules, favorites survived logout
+
+### Maintenance Feature Tests (Standalone)
+- ✅ Event deletion
+- ✅ Schedule editing
+- ✅ Schedule disable/enable toggle
+- ✅ Schedule deletion
 
 ### Edge Case Tests
 - ✅ Duplicate username rejection
 - ✅ Invalid login credentials
 - ✅ Protected route authentication
 
+### Page Load Tests
+- ✅ All main pages load without JS errors
+- ✅ Glossary displays 143+ species
+- ✅ FAQ accordion functionality
+
 ### What Gets Tested
 - Firebase Authentication integration
 - Firestore data operations (UID-based)
+- Tank event logging (quick + detailed)
+- Recurring schedule management
 - Session management across logout/login
 - Data persistence and retrieval
 - UI state updates
@@ -87,11 +105,18 @@ npm run test:report
 ✓ Complete User Flow > should handle registration, data operations, and persistence
   ✓ Registration successful for user: testuser1234567890
   ✓ Tank created successfully
+  ✓ Quick log water change successful
+  ✓ Detailed parameter test event logged
+  ✓ Maintenance schedule created
+  ✓ Schedule marked complete and event logged
+  ✓ Custom schedule created
   ✓ Favorite added successfully
   ✓ Comparison created successfully
   ✓ Logout successful
   ✓ Login successful
   ✓ Tank data persisted correctly
+  ✓ Maintenance events persisted correctly
+  ✓ Schedules persisted correctly
   ✓ Favorite data persisted correctly
   ✓ Comparison history persisted correctly
 
@@ -105,10 +130,15 @@ Verified:
   ✓ User registration
   ✓ User login
   ✓ Tank creation
+  ✓ Quick event logging
+  ✓ Detailed event logging
+  ✓ Schedule creation
+  ✓ Schedule completion
+  ✓ Custom schedules
   ✓ Favorite species management
   ✓ Comparison saving
   ✓ Logout/Login cycle
-  ✓ Data persistence across sessions
+  ✓ Data persistence (tanks, events, schedules)
 ========================================
 ```
 
@@ -134,8 +164,10 @@ These test users remain in Firebase after tests complete. To clean up:
 4. Let them accumulate (they don't affect production users)
 
 ### Test Data Created
-Each test creates:
+Each test run creates:
 - 1 tank: "Test Community Tank" (55 gallons, with Neon Tetra)
+- 3+ maintenance events: Water Change (x2), Parameter Test
+- 2 schedules: Weekly Water Change, Custom "Check CO2 Levels"
 - 1 favorite: Cardinal Tetra
 - 1+ comparisons: Neon Tetra vs Guppy
 
@@ -240,6 +272,9 @@ Potential additions for future testing:
 - [ ] Load testing (concurrent users)
 - [ ] Firestore emulator integration (isolated test environment)
 - [ ] Test data cleanup automation
+- [ ] Species detail page tests
+- [ ] Comparison export functionality tests
+- [ ] Dark mode toggle tests
 
 ## Questions?
 
